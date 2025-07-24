@@ -8,7 +8,7 @@ const redirectRoutes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: ':id',
+    path: ':code',
     component: RedirectComponent,
   },
   {

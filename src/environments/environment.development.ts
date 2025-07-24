@@ -10,6 +10,6 @@ export const environment = {
   SECRET_KEY_JWT: 'esteesmisecretmaravillosoysecreto',
   TOAST_TIME: 2500,
   REDIRECT_TIME: 800,
-  MY_FRONTEND: 'http://localhost:4200',
-  DIRECT_LINK: 200,
+  MY_FRONTEND_URL_REDIRECT: 'http://localhost:4200/r',
+  DIRECT_LINK: 5,
 };

@@ -6,6 +6,7 @@
   <div
     class="relative galaxy-gradient p-8 rounded-2xl shadow-2xl max-w-lg w-full text-white border border-white/10 z-10 mx-4"
   >
+    @if (!errors().message) {
     <div class="stars-static"></div>
     <div class="relative z-10">
       <div class="text-center mb-6">
@@ -45,21 +46,9 @@
         </div>
       </div>
 
-      <!-- Mostrar estado de loading -->
       @if (loading()) {
       <div class="text-center mb-4">
         <p class="text-cyan-400">Cargando información del enlace...</p>
-      </div>
-      }
-
-      <!-- Mostrar errores -->
-      @if (errors().message) {
-      <div
-        class="text-center mb-4 p-4 bg-red-900/50 rounded-lg border border-red-500/50"
-      >
-        <p class="text-red-400">
-          Error {{ errors().code }}: {{ errors().message }}
-        </p>
       </div>
       }
 
@@ -73,7 +62,7 @@
               class="bg-gray-900/50 border border-white/10 text-gray-300 text-sm rounded-lg block w-full p-2.5 pr-10"
               readonly
               type="text"
-              [value]="dataLink()?.link?.originalUrl || 'Cargando...'"
+              [value]="dataLink()?.originalUrl || 'Cargando...'"
             />
             <button
               class="absolute inset-y-0 right-0 flex items-center pr-3"
@@ -106,7 +95,7 @@
               class="bg-gray-900/50 border border-white/10 text-gray-300 text-sm rounded-lg block w-full p-2.5 pr-10"
               readonly
               type="text"
-              [value]="dataLink()?.link?.shortCode + '/' + idCurrent()"
+              [value]="dataLink()?.shortCode + '/' + idCurrent()"
             />
             <button
               class="absolute inset-y-0 right-0 flex items-center pr-3"
@@ -139,6 +128,7 @@
         >
           Ir ahora mismo
         </button>
+        @if (!pauseRedirect()) {
         <button
           (click)="cancelRedirect()"
           class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 cursor-pointer"
@@ -146,7 +136,35 @@
         >
           Cancelar
         </button>
+        } @else {
+        <div class="flex justify-center items-center">
+          <button
+            (click)="togglePause()"
+            [class]="
+              pauseRedirect()
+                ? 'bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 shadow-lg shadow-cyan-500/20 cursor-pointer'
+                : 'bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-6 rounded-lg transition duration-300 shadow-lg shadow-red-500/20 cursor-pointer'
+            "
+            type="button"
+          >
+            <span class="flex items-center gap-2">
+              @if (pauseRedirect()) {
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              Reanudar }
+            </span>
+          </button>
+        </div>
+        }
       </div>
     </div>
+    } @else {
+    <error-redirect [errors]="errors()" />
+    }
   </div>
 </section>

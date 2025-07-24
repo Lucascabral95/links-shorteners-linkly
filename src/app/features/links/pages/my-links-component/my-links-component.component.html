@@ -113,7 +113,7 @@
                     : 'Enlace inactivo'
                 "
               ></span>
-              <a [routerLink]="['/dashboard/my-links/detail', link.id]">
+              <a [routerLink]="['/dashboard/my-links/detail', link.shortCode]">
                 <h3
                   class="truncate text-lg font-semibold text-base-content hover:underline cursor-pointer"
                 >
@@ -123,11 +123,11 @@
             </div>
             <div class="mt-2 flex flex-col gap-x-4 gap-y-1 pl-6 text-sm">
               <a
-                [href]="myFrontend + '/' + (link.shortCode || 'abc123')"
+                [href]="myFrontend + '/' + link.shortCode"
                 target="_blank"
                 class="font-medium text-primary hover:underline"
               >
-                {{ myFrontend }}/{{ link.shortCode || "abc123" }}
+                {{ myFrontend }}/{{ link.shortCode }}
               </a>
               <a
                 [href]="link.originalUrl"
@@ -139,7 +139,7 @@
               </a>
 
               <button
-                (click)="openLink(link.id)"
+                (click)="openLink(link.shortCode)"
                 class="btn btn-sm btn-primary mt-2 w-fit"
               >
                 <i class="fas fa-external-link-alt text-sm"></i>
@@ -152,7 +152,7 @@
             <button
               class="btn btn-ghost btn-square btn-sm"
               title="Copiar enlace"
-              (click)="copyLink(link.shortCode || 'abc123')"
+              (click)="copyLink(link.shortCode)"
             >
               <i class="fas fa-copy text-base"></i>
             </button>

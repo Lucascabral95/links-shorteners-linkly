@@ -1,0 +1,54 @@
+<div class="stars-static"></div>
+<div class="relative z-10">
+  <div class="text-center space-y-6">
+    <div class="flex justify-center">
+      <div class="relative">
+        <div
+          class="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center border border-red-500/30 shadow-lg shadow-red-500/20"
+        >
+          <svg
+            class="w-10 h-10 text-red-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+            ></path>
+          </svg>
+        </div>
+        <div
+          class="absolute inset-0 w-20 h-20 bg-red-500/10 rounded-full animate-pulse"
+        ></div>
+      </div>
+    </div>
+
+    <div>
+      <h1 class="text-3xl font-bold text-red-400 mb-2">¡Uhh! Algo salió mal</h1>
+      <p class="text-gray-400">No pudimos procesar tu solicitud</p>
+    </div>
+
+    <div
+      class="bg-red-900/20 border border-red-500/30 rounded-xl p-6 backdrop-blur-sm"
+    >
+      <div class="space-y-3">
+        <div class="flex items-center justify-center space-x-2">
+          <span class="text-red-300 font-semibold text-sm"
+            >Código de Error:</span
+          >
+          <span
+            class="bg-red-500/20 text-red-400 px-3 py-1 rounded-full text-sm font-mono"
+          >
+            {{ errors().code }}
+          </span>
+        </div>
+        <p class="text-red-300 text-center leading-relaxed">
+          {{ errors().message }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,15 @@
-export const environment = {};
+export const environment = {
+  production: false,
+  apiUrl: "http://localhost:4000/api/v1",
+  version: "v1.0.0",
+  darkMode: 'dark',
+  lightMode: 'valentine',
+  STORAGE_KEY: 'darkModeLinkty',
+  timeSuccessModal: 3000,
+  STORAGE_KEY_AUTH: 'authLinkty',
+  SECRET_KEY_JWT: 'hereisyoursecret',
+  TOAST_TIME: 2500,
+  REDIRECT_TIME: 800,
+  MY_FRONTEND_URL_REDIRECT: 'http://localhost:4200/r',
+  DIRECT_LINK: 5,
+};

@@ -16,8 +16,7 @@ import { ErrorRequestsComponent } from "../../../../shared/components/errors/err
 import { ClicksService } from '../../../clicks/service/clicks.service';
 
 const TOAST_TIME = environment.TOAST_TIME
-const REDIRECT_TIME = environment.REDIRECT_TIME
-const MY_FRONTEND = environment.MY_FRONTEND
+const MY_FRONTEND = environment.MY_FRONTEND_URL_REDIRECT
 
 @Component({
   imports: [ToastComponentComponent, UpdateClickModalComponent, CreateLinkModalComponent, DatePipe, EmptyArrayComponent, LoadingComponentComponent, ErrorRequestsComponent, RouterLink],
@@ -200,8 +199,8 @@ export default class MyLinksComponentComponent {
     });
   }
 
-  copyLink(link: string): void {
-    const linkToCopy = MY_FRONTEND + '/' + (link || 'abc123')
+  copyLink(shortCode: string): void {
+    const linkToCopy = MY_FRONTEND + '/' + shortCode
     navigator.clipboard.writeText(linkToCopy)
     this.toastShow.set(true)
     this.toastMessage.set('Enlace copiado correctamente')
@@ -218,18 +217,8 @@ export default class MyLinksComponentComponent {
     this.showUpdateModal.set(true);
   }
 
-  openLink(linkId: string) {
-    this.clickService.createClick({ linkId, userId: this.authService.getUserId()! }).subscribe({
-      next: () => {
-        console.log('Enlace abierto correctamente')
-        setTimeout(() => {
-          this.router.navigate(['/dashboard/my-links/detail', linkId])
-        }, REDIRECT_TIME)
-      },
-      error: (err: HttpErrorResponse) => {
-        console.log(err)
-      }
-    });
+  openLink(shortCode: string) {
+    this.router.navigate(['/r', shortCode])
   }
 
 }
