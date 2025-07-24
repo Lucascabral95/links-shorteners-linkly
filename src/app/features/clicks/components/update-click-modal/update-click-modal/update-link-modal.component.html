@@ -1,0 +1,945 @@
+<!-- <div
+  class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+>
+  <div
+    class="relative w-full max-w-2xl bg-base-100 rounded-3xl shadow-2xl overflow-hidden border border-base-300"
+    (click)="$event.stopPropagation()"
+  >
+    <div
+      class="bg-primary text-primary-content p-4 flex justify-between items-center"
+    >
+      <h3 class="text-xl font-bold">Modificar link</h3>
+      <button class="btn btn-circle btn-ghost btn-sm" (click)="onClose.emit()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <div class="p-6 max-h-[70vh] overflow-y-auto">
+      <form (ngSubmit)="onSubmit()" [formGroup]="myForm" class="space-y-6">
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-semibold flex items-center gap-2">
+              <svg
+                class="h-4 w-4 text-primary"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                />
+              </svg>
+              URL Original
+            </span>
+            <span class="label-text-alt text-error">*</span>
+          </label>
+          <input
+            type="text"
+            [class.border-error]="formUtils.isValidField(myForm, 'originalUrl')"
+            class="input input-bordered w-full focus:input-primary"
+            formControlName="originalUrl"
+            placeholder="https://ejemplo.com/mi-enlace-largo"
+          />
+          @if (myForm.get('originalUrl')?.invalid &&
+          myForm.get('originalUrl')?.touched) {
+          <div class="label">
+            <span class="label-text-alt text-error text-sm mt-1"
+              >URL válida requerida</span
+            >
+          </div>
+          }
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-semibold flex items-center gap-2">
+              <svg
+                class="h-4 w-4 text-primary"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                />
+              </svg>
+              Código corto
+            </span>
+            <span class="label-text-alt text-error">*</span>
+          </label>
+          <input
+            type="text"
+            [class.border-error]="formUtils.isValidField(myForm, 'shortCode')"
+            class="input input-bordered w-full focus:input-primary"
+            formControlName="shortCode"
+            placeholder="https://ejemplo.com/mi-enlace-largo"
+          />
+          @if (myForm.get('shortCode')?.invalid &&
+          myForm.get('shortCode')?.touched) {
+          <div class="label">
+            <span class="label-text-alt text-error text-sm mt-1"
+              >Código corto requerido</span
+            >
+          </div>
+          }
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text font-semibold flex items-center gap-2">
+                <svg
+                  class="h-4 w-4 text-secondary"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                  />
+                </svg>
+                Alias Personalizado
+              </span>
+              <span class="label-text-alt text-error">*</span>
+            </label>
+            <input
+              type="text"
+              [class.border-error]="
+                formUtils.isValidField(myForm, 'customAlias')
+              "
+              class="input input-bordered w-full focus:input-secondary"
+              formControlName="customAlias"
+              placeholder="mi-enlace-corto"
+            />
+            @if (myForm.get('customAlias')?.invalid &&
+            myForm.get('customAlias')?.touched) {
+            <div class="label">
+              <span class="label-text-alt text-error text-sm mt-1"
+                >Solo letras, números, guiones y guiones bajos</span
+              >
+            </div>
+            }
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text font-semibold flex items-center gap-2">
+                <svg
+                  class="h-4 w-4 text-accent"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+                Título
+              </span>
+              <span class="label-text-alt text-error">*</span>
+            </label>
+            <input
+              type="text"
+              [class.border-error]="formUtils.isValidField(myForm, 'title')"
+              class="input input-bordered w-full focus:input-accent"
+              formControlName="title"
+              placeholder="Título descriptivo"
+            />
+            @if (myForm.get('title')?.invalid && myForm.get('title')?.touched) {
+            <div class="label">
+              <span class="label-text-alt text-error text-sm mt-1"
+                >Mínimo 3 caracteres</span
+              >
+            </div>
+            }
+          </div>
+        </div>
+
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-semibold flex items-center gap-2">
+              <svg
+                class="h-4 w-4 text-info"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h7"
+                />
+              </svg>
+              Descripción
+            </span>
+          </label>
+          <textarea
+            class="textarea textarea-bordered w-full h-24 focus:textarea-info resize-none"
+            formControlName="description"
+            placeholder="Añade una descripción opcional..."
+          ></textarea>
+        </div>
+
+        <div class="collapse collapse-arrow bg-base-200/50 rounded-xl">
+          <input type="checkbox" />
+          <div
+            class="collapse-title text-sm font-semibold flex items-center gap-2"
+          >
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
+            Configuración Avanzada
+          </div>
+          <div class="collapse-content space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-medium flex items-center gap-2">
+                    <svg
+                      class="h-4 w-4 text-warning"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                      />
+                    </svg>
+                    Contraseña
+                  </span>
+                </label>
+                <input
+                  type="password"
+                  class="input input-bordered w-full focus:input-warning"
+                  formControlName="password"
+                  placeholder="Proteger con contraseña"
+                />
+              </div>
+
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-medium flex items-center gap-2">
+                    <svg
+                      class="h-4 w-4 text-error"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8 7V3a4 4 0 118 0v4m-4 6v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"
+                      />
+                    </svg>
+                    Expiración
+                  </span>
+                </label>
+                <input
+                  type="datetime-local"
+                  class="input input-bordered w-full focus:input-error"
+                  formControlName="expiresAt"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-medium">Estado</span>
+                </label>
+                <select
+                  class="select select-bordered w-full focus:select-success"
+                  formControlName="isActive"
+                >
+                  <option [value]="true">🟢 Activo</option>
+                  <option value="false">🔴 Inactivo</option>
+                </select>
+              </div>
+
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-medium">Visibilidad</span>
+                </label>
+                <select
+                  class="select select-bordered w-full focus:select-info"
+                  formControlName="isPublic"
+                >
+                  <option [value]="false">🔒 Privado</option>
+                  <option [value]="true">🌐 Público</option>
+                </select>
+              </div>
+
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-medium">Categoría</span>
+                </label>
+                <input
+                  type="text"
+                  class="input input-bordered w-full focus:input-primary"
+                  formControlName="category"
+                  placeholder="Etiqueta"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        @if (messageSuccess()) {
+        <div class="alert alert-success">
+          <svg
+            class="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+          <span>{{ messageSuccess() }}</span>
+        </div>
+        } @if (messageError()) {
+        <div class="alert alert-error">
+          <svg
+            class="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+          <span>{{ messageError() }}</span>
+        </div>
+        }
+        <div
+          class="flex flex-col sm:flex-row justify-end gap-3 w-full sm:w-auto pt-6 border-t border-base-300"
+        >
+          <button
+            type="button"
+            class="btn btn-outline btn-ghost w-full sm:w-auto"
+            (click)="onClose.emit()"
+            [class.btn-disabled]="isLoading() || messageSuccess()"
+          >
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary btn-wide w-full sm:w-auto"
+            [disabled]="myForm.invalid || isLoading()"
+            [class.btn-disabled]="
+              myForm.invalid || isLoading() || messageSuccess()
+            "
+          >
+            @if (!isLoading()) {
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            Actualizar } @else {
+            <span class="w-full sm:w-auto loading loading-spinner"></span>
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div> -->
+
+<!-- --------- -->
+
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-300"
+>
+  <div
+    class="relative w-full max-w-3xl bg-gradient-to-br from-base-100 to-base-200/50 rounded-2xl shadow-2xl overflow-hidden border border-base-300/50 animate-in zoom-in-95 duration-300"
+    (click)="$event.stopPropagation()"
+  >
+    <div
+      class="bg-gradient-to-r from-primary to-primary/90 text-primary-content p-6 flex justify-between items-center"
+    >
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-primary-content/20 rounded-lg">
+          <svg
+            class="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+            />
+          </svg>
+        </div>
+        <h3 class="text-2xl font-bold">Modificar enlace</h3>
+      </div>
+      <button
+        class="btn btn-circle btn-ghost btn-sm hover:bg-primary-content/20 transition-colors duration-200"
+        (click)="onClose.emit()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <div
+      class="p-8 max-h-[75vh] overflow-y-auto scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent"
+    >
+      <form (ngSubmit)="onSubmit()" [formGroup]="myForm" class="space-y-8">
+        <div class="form-control group">
+          <label class="label">
+            <span
+              class="label-text font-semibold flex items-center gap-2 text-base"
+            >
+              <div class="p-1.5 bg-primary/10 rounded-lg">
+                <svg
+                  class="h-4 w-4 text-primary"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                  />
+                </svg>
+              </div>
+              URL Original
+            </span>
+            <span class="label-text-alt text-error font-medium">*</span>
+          </label>
+          <input
+            type="text"
+            [class.border-error]="formUtils.isValidField(myForm, 'originalUrl')"
+            class="input input-bordered w-full focus:input-primary transition-all duration-200 bg-base-100/50 backdrop-blur-sm hover:bg-base-100"
+            formControlName="originalUrl"
+            placeholder="https://ejemplo.com/mi-enlace-largo"
+          />
+          @if (myForm.get('originalUrl')?.invalid &&
+          myForm.get('originalUrl')?.touched) {
+          <div class="label">
+            <span
+              class="label-text-alt text-error text-sm mt-1 flex items-center gap-1"
+            >
+              <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              URL válida requerida
+            </span>
+          </div>
+          }
+        </div>
+
+        <div class="form-control group">
+          <label class="label">
+            <span
+              class="label-text font-semibold flex items-center gap-2 text-base"
+            >
+              <div class="p-1.5 bg-secondary/10 rounded-lg">
+                <svg
+                  class="h-4 w-4 text-secondary"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
+                  />
+                </svg>
+              </div>
+              Código corto
+            </span>
+            <span class="label-text-alt text-error font-medium">*</span>
+          </label>
+          <input
+            type="text"
+            [class.border-error]="formUtils.isValidField(myForm, 'shortCode')"
+            class="input input-bordered w-full focus:input-secondary transition-all duration-200 bg-base-100/50 backdrop-blur-sm hover:bg-base-100"
+            formControlName="shortCode"
+            placeholder="mi-codigo-personalizado"
+          />
+          @if (myForm.get('shortCode')?.invalid &&
+          myForm.get('shortCode')?.touched) {
+          <div class="label">
+            <span
+              class="label-text-alt text-error text-sm mt-1 flex items-center gap-1"
+            >
+              <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              Código corto requerido
+            </span>
+          </div>
+          }
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="form-control group">
+            <label class="label">
+              <span
+                class="label-text font-semibold flex items-center gap-2 text-base"
+              >
+                <div class="p-1.5 bg-accent/10 rounded-lg">
+                  <svg
+                    class="h-4 w-4 text-accent"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                    />
+                  </svg>
+                </div>
+                Alias Personalizado
+              </span>
+              <span class="label-text-alt text-error font-medium">*</span>
+            </label>
+            <input
+              type="text"
+              [class.border-error]="
+                formUtils.isValidField(myForm, 'customAlias')
+              "
+              class="input input-bordered w-full focus:input-accent transition-all duration-200 bg-base-100/50 backdrop-blur-sm hover:bg-base-100"
+              formControlName="customAlias"
+              placeholder="mi-enlace-corto"
+            />
+            @if (myForm.get('customAlias')?.invalid &&
+            myForm.get('customAlias')?.touched) {
+            <div class="label">
+              <span
+                class="label-text-alt text-error text-sm mt-1 flex items-center gap-1"
+              >
+                <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                Solo letras, números, guiones y guiones bajos
+              </span>
+            </div>
+            }
+          </div>
+
+          <div class="form-control group">
+            <label class="label">
+              <span
+                class="label-text font-semibold flex items-center gap-2 text-base"
+              >
+                <div class="p-1.5 bg-info/10 rounded-lg">
+                  <svg
+                    class="h-4 w-4 text-info"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                </div>
+                Título
+              </span>
+              <span class="label-text-alt text-error font-medium">*</span>
+            </label>
+            <input
+              type="text"
+              [class.border-error]="formUtils.isValidField(myForm, 'title')"
+              class="input input-bordered w-full focus:input-info transition-all duration-200 bg-base-100/50 backdrop-blur-sm hover:bg-base-100"
+              formControlName="title"
+              placeholder="Título descriptivo"
+            />
+            @if (myForm.get('title')?.invalid && myForm.get('title')?.touched) {
+            <div class="label">
+              <span
+                class="label-text-alt text-error text-sm mt-1 flex items-center gap-1"
+              >
+                <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                Mínimo 3 caracteres
+              </span>
+            </div>
+            }
+          </div>
+        </div>
+
+        <div class="form-control group">
+          <label class="label">
+            <span
+              class="label-text font-semibold flex items-center gap-2 text-base"
+            >
+              <div class="p-1.5 bg-success/10 rounded-lg">
+                <svg
+                  class="h-4 w-4 text-success"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 6h16M4 12h16M4 18h7"
+                  />
+                </svg>
+              </div>
+              Descripción
+            </span>
+          </label>
+          <textarea
+            class="textarea textarea-bordered w-full h-28 focus:textarea-success resize-none transition-all duration-200 bg-base-100/50 backdrop-blur-sm hover:bg-base-100"
+            formControlName="description"
+            placeholder="Añade una descripción opcional para tu enlace..."
+          ></textarea>
+        </div>
+
+        <div
+          class="collapse collapse-arrow bg-gradient-to-r from-base-200/80 to-base-300/50 rounded-2xl border border-base-300/50 shadow-sm hover:shadow-md transition-all duration-300"
+        >
+          <input type="checkbox" />
+          <div
+            class="collapse-title text-lg font-bold flex items-center gap-3 text-base-content"
+          >
+            <div class="p-2 bg-primary/10 rounded-xl">
+              <svg
+                class="h-5 w-5 text-primary"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+            </div>
+            Configuración Avanzada
+          </div>
+          <div class="collapse-content space-y-6 pt-2">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="form-control">
+                <label class="label">
+                  <span
+                    class="label-text font-semibold flex items-center gap-2"
+                  >
+                    <div class="p-1.5 bg-warning/10 rounded-lg">
+                      <svg
+                        class="h-4 w-4 text-warning"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                        />
+                      </svg>
+                    </div>
+                    Contraseña
+                  </span>
+                </label>
+                <input
+                  type="password"
+                  class="input input-bordered w-full focus:input-warning transition-all duration-200 bg-base-100/50 backdrop-blur-sm hover:bg-base-100"
+                  formControlName="password"
+                  placeholder="Proteger con contraseña"
+                />
+              </div>
+
+              <div class="form-control">
+                <label class="label">
+                  <span
+                    class="label-text font-semibold flex items-center gap-2"
+                  >
+                    <div class="p-1.5 bg-error/10 rounded-lg">
+                      <svg
+                        class="h-4 w-4 text-error"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    </div>
+                    Fecha de Expiración
+                  </span>
+                </label>
+                <input
+                  type="datetime-local"
+                  class="input input-bordered w-full focus:input-error transition-all duration-200 bg-base-100/50 backdrop-blur-sm hover:bg-base-100"
+                  formControlName="expiresAt"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-semibold">Estado</span>
+                </label>
+                <select
+                  class="select select-bordered w-full focus:select-success transition-all duration-200 bg-base-100/50 backdrop-blur-sm hover:bg-base-100"
+                  formControlName="isActive"
+                >
+                  <option [value]="true">🟢 Activo</option>
+                  <option value="false">🔴 Inactivo</option>
+                </select>
+              </div>
+
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-semibold">Visibilidad</span>
+                </label>
+                <select
+                  class="select select-bordered w-full focus:select-info transition-all duration-200 bg-base-100/50 backdrop-blur-sm hover:bg-base-100"
+                  formControlName="isPublic"
+                >
+                  <option [value]="false">🔒 Privado</option>
+                  <option [value]="true">🌐 Público</option>
+                </select>
+              </div>
+
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-semibold">Categoría</span>
+                </label>
+                <input
+                  type="text"
+                  class="input input-bordered w-full focus:input-primary transition-all duration-200 bg-base-100/50 backdrop-blur-sm hover:bg-base-100"
+                  formControlName="category"
+                  placeholder="Etiqueta"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        @if (messageSuccess()) {
+        <div class="alert alert-success shadow-lg border-l-4 border-success">
+          <div class="flex items-center gap-3">
+            <div class="p-1 bg-success/20 rounded-full">
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+            <span class="font-medium">{{ messageSuccess() }}</span>
+          </div>
+        </div>
+        } @if (messageError()) {
+        <div class="alert alert-error shadow-lg border-l-4 border-error">
+          <div class="flex items-center gap-3">
+            <div class="p-1 bg-error/20 rounded-full">
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </div>
+            <span class="font-medium">{{ messageError() }}</span>
+          </div>
+        </div>
+        }
+
+        <div
+          class="flex flex-col sm:flex-row justify-end gap-4 pt-8 border-t border-base-300/50"
+        >
+          <button
+            type="button"
+            class="btn btn-outline btn-ghost w-full sm:w-auto hover:bg-base-200 transition-all duration-200"
+            (click)="onClose.emit()"
+            [class.btn-disabled]="isLoading() || messageSuccess()"
+          >
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary btn-wide w-full sm:w-auto shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5"
+            [disabled]="myForm.invalid || isLoading()"
+            [class.btn-disabled]="
+              myForm.invalid || isLoading() || messageSuccess()
+            "
+          >
+            @if (!isLoading()) {
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+              />
+            </svg>
+            Actualizar } @else {
+            <span class="loading loading-spinner w-4 h-4"></span>
+            Actualizando... }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

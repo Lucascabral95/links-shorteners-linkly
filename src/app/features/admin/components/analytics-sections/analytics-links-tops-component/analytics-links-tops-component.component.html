@@ -1,0 +1,36 @@
+<div class="chart-container mb-8">
+  <h2 class="text-base-content text-center font-medium text-2xl mt-2 mb-4">
+    📊 Top links más clickeados
+  </h2>
+
+  <div class="w-full flex justify-end items-center my-2">
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Periodo de tiempo</legend>
+      <select class="select select-primary" (change)="filterDate($event)">
+        <option disabled selected>Selecciona un periodo</option>
+        <option value="1h">Ultima hora</option>
+        <option value="7d">Ultimos 7 dias</option>
+        <option value="30d">Ultimos 30 dias</option>
+        <option value="90d">Ultimos 90 dias</option>
+        <option value="1y">Ultimos año</option>
+      </select>
+    </fieldset>
+  </div>
+
+  @if (data(); as linksData) {
+  <div class="stats">
+    <p>
+      Total de links de {{ currentFilterDate() }}:
+      <strong>{{ linksData.quantityLinks }}</strong>
+    </p>
+  </div>
+  }
+
+  <div class="bg-white" #chartDiv id="chart"></div>
+
+  @if (!data()) {
+  <div class="loading">
+    <p>Cargando datos...</p>
+  </div>
+  }
+</div>

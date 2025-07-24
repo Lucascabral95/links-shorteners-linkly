@@ -1,0 +1,50 @@
+<div class="flex h-full w-72 flex-col border-r border-base-300 bg-base-200 p-4">
+  <div class="flex flex-col gap-4">
+    <h1 class="px-2 text-2xl font-bold">
+      Linkly
+      <span class="text-base font-medium text-secondary">{{ versionApp }}</span>
+    </h1>
+    <div class="my-3">
+      <button class="btn btn-primary w-full" (click)="openModalAndCloseMenu()">
+        <i class="fa-solid fa-plus"></i>
+        Crear enlace
+      </button>
+    </div>
+  </div>
+
+  <div class="flex-grow">
+    <div class="flex flex-col gap-1">
+      @for (section of sections(); track section.id) {
+      <a
+        [routerLink]="section.link"
+        routerLinkActive="bg-primary text-primary-content font-semibold"
+        class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-base-content transition-colors duration-200 hover:bg-base-300"
+        (click)="closeMenu.emit()"
+      >
+        <i [className]="section.icon + ' w-5 text-center text-lg'"></i>
+        <p class="text-sm font-medium">{{ section.name }}</p>
+      </a>
+      }
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <button
+      class="btn btn-ghost justify-start"
+      (click)="toggleDarkMode($event)"
+    >
+      <i
+        class="fa-solid w-5 text-center text-lg"
+        [class]="darkMode() ? 'fa-sun' : 'fa-moon'"
+      ></i>
+      Modo {{ darkMode() ? "Claro" : "Oscuro" }}
+    </button>
+    <button class="btn btn-ghost justify-start text-error" (click)="logout()">
+      <i class="fa-solid fa-right-from-bracket w-5 text-center text-lg"></i>
+      Cerrar sesión
+    </button>
+  </div>
+  @if (showModal()) {
+  <create-link-modal title="Crear enlace" (onClose)="showModal.set(false)" />
+  }
+</div>

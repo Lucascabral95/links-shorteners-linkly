@@ -1,0 +1,307 @@
+<section class="container-main">
+  <div
+    class="flex flex-col items-center justify-between gap-4 sm:flex-row sm:items-center mt-12 mb-2"
+  >
+    <div class="mb-4">
+      <h2 class="title-seccion">Mis enlaces</h2>
+      <p class="description-section">
+        Analizá todos los enlaces acortados que creaste.
+      </p>
+    </div>
+
+    <button
+      class="btn btn-primary w-full sm:w-auto mt-2 sm:mt-0"
+      (click)="showModal.set(true)"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+        class="size-5"
+      >
+        <path
+          d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z"
+        />
+      </svg>
+      Crear enlace
+    </button>
+  </div>
+
+  <div
+    class="mb-8 flex flex-col sm:flex-row justify-between items-center gap-4"
+  >
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend text-primary">Búsqueda por título</legend>
+      <label class="input input-primary">
+        <svg
+          class="h-[1em] opacity-50"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <g
+            stroke-linejoin="round"
+            stroke-linecap="round"
+            stroke-width="2.5"
+            fill="none"
+            stroke="currentColor"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </g>
+        </svg>
+        <input
+          (input)="searchTitle($event)"
+          type="search"
+          class="grow"
+          placeholder="Buscar por título..."
+        />
+      </label>
+    </fieldset>
+    <div class="flex items-center gap-2 w-full sm:w-auto">
+      <p class="text-sm text-base-content/80 shrink-0">Estado</p>
+      <select
+        class="select select-primary w-full"
+        [value]="currentActiveStatus"
+        (change)="filterStatus($event)"
+      >
+        <option value="">Todos</option>
+        <option value="true">Activos</option>
+        <option value="false">Inactivos</option>
+      </select>
+    </div>
+  </div>
+
+  @if (loading()) {
+  <loading-component />
+  } @else { @if (error().message !== '') {
+  <error-requests [messageError]="error().message" [codeError]="error().code" />
+  } @else {
+  <div class="space-y-4">
+    @for (link of linksService.linksArray()?.links; track link.id) {
+    <div
+      class="card card-compact bg-base-100 shadow-md hover:shadow-lg transition-shadow duration-300 border border-base-300"
+    >
+      <div class="card-body">
+        <div
+          class="flex flex-col sm:flex-row justify-between gap-4 sm:items-start"
+        >
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-3">
+              <span
+                class="flex-shrink-0 size-2.5 rounded-full"
+                [class.bg-success]="
+                  link.isActive && !isLinkExpired(link.expiresAt)
+                "
+                [class.bg-error]="
+                  !link.isActive && !isLinkExpired(link.expiresAt)
+                "
+                [class.bg-warning]="isLinkExpired(link.expiresAt)"
+                [title]="
+                  isLinkExpired(link.expiresAt)
+                    ? 'Expirado'
+                    : link.isActive
+                    ? 'Activo'
+                    : 'Inactivo'
+                "
+                data-tooltip="true"
+                data-tooltip-position="top"
+                [attr.aria-label]="
+                  isLinkExpired(link.expiresAt)
+                    ? 'Enlace expirado'
+                    : link.isActive
+                    ? 'Enlace activo'
+                    : 'Enlace inactivo'
+                "
+              ></span>
+              <a [routerLink]="['/dashboard/my-links/detail', link.id]">
+                <h3
+                  class="truncate text-lg font-semibold text-base-content hover:underline cursor-pointer"
+                >
+                  {{ link.title || "Sin título" }}
+                </h3>
+              </a>
+            </div>
+            <div class="mt-2 flex flex-col gap-x-4 gap-y-1 pl-6 text-sm">
+              <a
+                [href]="myFrontend + '/' + (link.shortCode || 'abc123')"
+                target="_blank"
+                class="font-medium text-primary hover:underline"
+              >
+                {{ myFrontend }}/{{ link.shortCode || "abc123" }}
+              </a>
+              <a
+                [href]="link.originalUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="truncate text-base-content/70 hover:underline"
+              >
+                {{ link.originalUrl }}
+              </a>
+
+              <button
+                (click)="openLink(link.id)"
+                class="btn btn-sm btn-primary mt-2 w-fit"
+              >
+                <i class="fas fa-external-link-alt text-sm"></i>
+                Ir al enlace
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1 self-end sm:self-start">
+            <button
+              class="btn btn-ghost btn-square btn-sm"
+              title="Copiar enlace"
+              (click)="copyLink(link.shortCode || 'abc123')"
+            >
+              <i class="fas fa-copy text-base"></i>
+            </button>
+            <a [routerLink]="['/dashboard/my-links/detail', link.id]">
+              <button
+                class="btn btn-ghost btn-square btn-sm"
+                title="Ver estadísticas"
+              >
+                <i class="fas fa-chart-line text-base"></i>
+              </button>
+            </a>
+            <div class="dropdown dropdown-end">
+              <div
+                tabindex="0"
+                role="button"
+                class="btn btn-ghost btn-square btn-sm"
+                title="Más opciones"
+              >
+                <i class="fas fa-ellipsis-v text-base"></i>
+              </div>
+              <ul
+                tabindex="0"
+                class="dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-40"
+              >
+                <li (click)="openUpdateModal(link.id)">
+                  <a
+                    class="text-primary hover:!bg-primary hover:!text-primary-content"
+                  >
+                    <i class="fas fa-edit w-4"></i> Editar
+                  </a>
+                </li>
+                <li>
+                  <a
+                    (click)="deleteLink(link.id)"
+                    class="text-error hover:!bg-error hover:!text-error-content"
+                    ><i class="fas fa-trash w-4"></i> Eliminar</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 pt-4 border-t border-base-300">
+          <div
+            class="flex flex-wrap justify-between items-center gap-x-4 gap-y-2 text-xs text-base-content/60"
+          >
+            <div class="flex items-center gap-1.5">
+              <i class="far fa-calendar"></i>
+              <span>Creado: {{ link.created_at | date }}</span>
+            </div>
+            @if (link.expiresAt) {
+            <div class="flex items-center gap-1.5">
+              @if (isLinkExpired(link.expiresAt)) {
+              <span class="text-error">
+                <i class="fas fa-exclamation-triangle"></i> Expirado
+              </span>
+              }
+              <!-- ---- -->
+              @else {
+              <i class="far fa-clock"></i>
+              <span>
+                Expira: {{ link.expiresAt | date }}
+                {{ link.expiresAt | date : "shortTime" }}
+              </span>
+              }
+            </div>
+            } @else {
+            <div class="flex items-center gap-1.5">
+              <i class="far fa-clock"></i>
+              <span>Sin fecha de expiración</span>
+            </div>
+            }
+            <a [routerLink]="['/dashboard/user', userId()]">
+              <div class="badge badge-sm badge-outline">
+                Creador: {{ link.user!.full_name }}
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    } @empty {
+    <empty-array-component
+      message="No tenés enlaces"
+      description="Empezá por crear tu primer enlace acortado."
+    >
+      <button class="btn btn-primary mt-6" (click)="showModal.set(true)">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          class="size-5"
+        >
+          <path
+            d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z"
+          />
+        </svg>
+        Crear primer enlace
+      </button>
+    </empty-array-component>
+    }
+
+    <div class="flex flex-col items-center justify-center gap-2 pt-4">
+      <div class="join">
+        <button
+          class="join-item btn"
+          [disabled]="page() === 1"
+          (click)="previousPage()"
+        >
+          «
+        </button>
+
+        @for (pageNum of pagesArray(); track $index) {
+        <button
+          class="join-item btn"
+          [class.btn-active]="page() === pageNum"
+          (click)="goToPage(pageNum)"
+        >
+          {{ pageNum }}
+        </button>
+        }
+
+        <button
+          class="join-item btn"
+          [disabled]="page() === quantityPages()"
+          (click)="nextPage()"
+        >
+          »
+        </button>
+      </div>
+      <div class="text-center text-sm text-base-content/70">
+        Página {{ page() }} de {{ quantityPages() }}
+      </div>
+    </div>
+  </div>
+  } } @if (showModal()) {
+  <create-link-modal title="Crear enlace" (onClose)="showModal.set(false)" />
+  }
+</section>
+
+@if (toastShow()) {
+<toast-component
+  [message]="toastMessage()"
+  [successOrError]="toastSuccessOrError()"
+/>
+} @if (showUpdateModal()) {
+<update-link-modal-component
+  (onClose)="showUpdateModal.set(false)"
+  [linkId]="linkIdUpdateModal()"
+/>
+}

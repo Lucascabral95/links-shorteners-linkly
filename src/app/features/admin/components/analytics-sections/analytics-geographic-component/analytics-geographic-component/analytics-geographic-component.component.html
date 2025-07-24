@@ -1,0 +1,41 @@
+<div class="analytics-container">
+  <div class="header-section">
+    <h2 class="title-section-analytics">
+      Estadísticas de clicks por país, ciudad, dispositivo y navegador
+    </h2>
+  </div>
+
+  <div class="charts-grid">
+    <div class="chart-card" #chartDiv>
+      @if (!data()) {
+      <div class="chart-loading">
+        <div class="loading-spinner"></div>
+      </div>
+      }
+    </div>
+
+    <div class="chart-card" #chartDiv2>
+      @if (!data()) {
+      <div class="chart-loading">
+        <div class="loading-spinner"></div>
+      </div>
+      }
+    </div>
+
+    <div class="chart-card" #chartDiv3>
+      @if (!data()) {
+      <div class="chart-loading">
+        <div class="loading-spinner"></div>
+      </div>
+      }
+    </div>
+
+    <div class="chart-card" #chartDiv4>
+      @if (!data()) {
+      <div class="chart-loading">
+        <div class="loading-spinner"></div>
+      </div>
+      }
+    </div>
+  </div>
+</div>

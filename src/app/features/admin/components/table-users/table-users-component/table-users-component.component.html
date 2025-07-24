@@ -1,0 +1,63 @@
+<div class="overflow-x-auto">
+  <table class="table table-md">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Email</th>
+        <th>Nombre completo</th>
+        <th>Rol</th>
+        <th>Verificado</th>
+        <th>Proveedor</th>
+        <th>Fecha de creación</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (user of usersList()?.users || []; track $index) {
+      <tr>
+        <th>{{ $index + 1 }}</th>
+        <td>{{ user.email }}</td>
+        <td>{{ user.full_name }}</td>
+        <td>
+          @if (user.role === 'ADMIN') {
+          <span class="badge badge-success">Administrador</span>
+          } @else if (user.role === 'PREMIUM') {
+          <span class="badge badge-error">Premium</span>
+          } @else if (user.role === 'GUEST') {
+          <span class="badge badge-warning">Invitado</span>
+          } @else if (user.role === 'FREE') {
+          <span class="badge badge-info">Gratuito</span>
+          }
+        </td>
+        <td>
+          @if (user.verified) {
+          <span class="badge badge-success">Sí</span>
+          } @else {
+          <span class="badge badge-error">No</span>
+          }
+        </td>
+        <td>{{ user.provider | titlecase }}</td>
+        <td>{{ user.created_at | date }}</td>
+        <td>
+          <button (click)="updateUserById(user.id)" class="btn btn-warning">
+            Editar
+          </button>
+          <button
+            (click)="userForDeletedById.emit(user.id)"
+            class="btn btn-danger"
+          >
+            Eliminar
+          </button>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+@if (showModalUpdateUser()) {
+<modal-user-component
+  (onClose)="showModalUpdateUser.set(false)"
+  [userIdForUpdate]="userIdForUpdate()"
+/>
+}

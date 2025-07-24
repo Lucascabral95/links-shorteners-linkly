@@ -1,0 +1,99 @@
+<section class="container-main">
+  <h2 class="text-base-content font-medium text-2xl mt-12">
+    Todos los usuarios
+  </h2>
+
+  <div class="flex justify-between items-center mb-4 mt-4">
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend text-primary">Búsqueda por nombre</legend>
+      <label class="input input-primary">
+        <svg
+          class="h-[1em] opacity-50"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <g
+            stroke-linejoin="round"
+            stroke-linecap="round"
+            stroke-width="2.5"
+            fill="none"
+            stroke="currentColor"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </g>
+        </svg>
+        <input
+          (input)="searchFullName($event)"
+          type="search"
+          class="grow"
+          placeholder="Buscar por nombre..."
+        />
+      </label>
+    </fieldset>
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Roles</legend>
+      <select (change)="filterByRole($event)" class="select select-primary">
+        <option value="" selected>Todos</option>
+        <option value="ADMIN">Administrador</option>
+        <option value="USER">Usuario</option>
+        <option value="GUEST">Invitado</option>
+        <option value="FREE">Gratis</option>
+      </select>
+    </fieldset>
+  </div>
+
+  <!-- ---- -->
+  @if ( error()?.message !== null ) {
+  <error-requests
+    [messageError]="error()?.message || 'Internal Server Error'"
+    [codeError]="error()?.code || 500"
+  />
+  } @else { @if (arrayEmpty()) {
+  <empty-array-component
+    message="No hay usuarios"
+    description="Cambiá tu filtrado de busqueda para encontrar usuarios."
+  />
+  } @else {
+
+  <div class="my-4">
+    <table-users-component
+      [usersList]="userService.usersList()"
+      (userForDeletedById)="deleteUserById($event)"
+    />
+  </div>
+
+  <div class="flex flex-col items-center justify-center gap-2 pt-4">
+    <div class="join">
+      <button
+        class="join-item btn"
+        [disabled]="page() === 1"
+        (click)="previousPage()"
+      >
+        «
+      </button>
+
+      @for (pageNum of pagesArray(); track $index) {
+      <button
+        class="join-item btn"
+        [class.btn-active]="page() === pageNum"
+        (click)="goToPage(pageNum)"
+      >
+        {{ pageNum }}
+      </button>
+      }
+
+      <button
+        class="join-item btn"
+        [disabled]="page() === quantityPages()"
+        (click)="nextPage()"
+      >
+        »
+      </button>
+    </div>
+    <div class="text-center text-sm text-base-content/70">
+      Página {{ page() }} de {{ quantityPages() }}
+    </div>
+  </div>
+  } }
+</section>

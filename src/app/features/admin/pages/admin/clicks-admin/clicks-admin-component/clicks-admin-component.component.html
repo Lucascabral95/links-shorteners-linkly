@@ -1,0 +1,99 @@
+<section class="container-main flex flex-col gap-y-4">
+  <div class="flex items-center justify-center">
+    <h2 class="text-base-content font-medium text-2xl my-4">
+      Todos los clicks realizados
+    </h2>
+  </div>
+
+  <div class="mb-4 flex justify-between items-center">
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend text-primary">
+        Búsqueda por dispositivo
+      </legend>
+      <label class="input input-primary">
+        <svg
+          class="h-[1em] opacity-50"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <g
+            stroke-linejoin="round"
+            stroke-linecap="round"
+            stroke-width="2.5"
+            fill="none"
+            stroke="currentColor"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </g>
+        </svg>
+        <input
+          (input)="searchDevice($event)"
+          type="search"
+          class="grow"
+          placeholder="Buscar por dispositivo..."
+        />
+      </label>
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend text-primary">Cantidad de clicks</legend>
+      <input
+        class="input input-primary"
+        type="number"
+        [value]="limit()"
+        (input)="limitOfClicks($event)"
+      />
+    </fieldset>
+  </div>
+
+  <div
+    class="mb-10 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+  >
+    @for (click of clicksService.clicksArray()?.clicks; track $index) {
+    <card-click-component [click]="click" /> } @empty {
+    <div class="col-span-full">
+      <empty-array-component
+        message="No hay clicks"
+        description="Empezá por hacer click en algún enlace acortado."
+      />
+    </div>
+    }
+  </div>
+
+  <div class="flex flex-col gap-y-4">
+    <div class="flex justify-center items-center">
+      <div class="join">
+        <button
+          class="join-item btn"
+          [disabled]="page() === 1"
+          (click)="previousPage()"
+        >
+          «
+        </button>
+
+        @for (pageNum of pagesArray(); track $index) {
+        <button
+          class="join-item btn"
+          [class.btn-active]="page() === pageNum"
+          (click)="goToPage(pageNum)"
+        >
+          {{ pageNum }}
+        </button>
+        }
+
+        <button
+          class="join-item btn"
+          [disabled]="page() === quantityPages()"
+          (click)="nextPage()"
+        >
+          »
+        </button>
+      </div>
+    </div>
+
+    <div class="text-center mt-2 text-sm opacity-70">
+      Página {{ page() }} de {{ quantityPages() }}
+    </div>
+  </div>
+</section>

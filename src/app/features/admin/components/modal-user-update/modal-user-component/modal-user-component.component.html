@@ -1,0 +1,241 @@
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+>
+  <div
+    class="relative w-full max-w-2xl bg-base-100 rounded-3xl shadow-2xl overflow-hidden border border-base-300"
+    (click)="$event.stopPropagation()"
+  >
+    <div
+      class="bg-primary text-primary-content p-4 flex justify-between items-center"
+    >
+      <h3 class="text-xl font-bold">{{ title() }} {{ userIdForUpdate() }}</h3>
+      <button class="btn btn-circle btn-ghost btn-sm" (click)="onClose.emit()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <div class="p-6 max-h-[70vh] overflow-y-auto">
+      <form (ngSubmit)="onSubmit()" [formGroup]="myForm" class="space-y-6">
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-semibold flex items-center gap-2">
+              <svg
+                class="h-4 w-4 text-primary"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                />
+              </svg>
+              Nombre completo
+            </span>
+            <span class="label-text-alt text-error">*</span>
+          </label>
+          <input
+            type="text"
+            [class.border-error]="formUtils.isValidField(myForm, 'full_name')"
+            class="input input-bordered w-full focus:input-primary font-semibold"
+            formControlName="full_name"
+            placeholder="Nombre completo"
+          />
+          @if (myForm.get('full_name')?.invalid &&
+          myForm.get('full_name')?.touched) {
+          <div class="label">
+            <span class="label-text-alt text-error text-sm mt-1"
+              >Nombre completo requerido</span
+            >
+          </div>
+          }
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-semibold flex items-center gap-2">
+              <svg
+                class="h-4 w-4 text-primary"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                />
+              </svg>
+              Rol
+            </span>
+            <span class="label-text-alt text-error">*</span>
+          </label>
+          <select
+            class="select select-bordered w-full focus:select-primary font-semibold"
+            name="role"
+            id="role"
+            formControlName="role"
+          >
+            <option value="" disabled selected>Seleccione un rol</option>
+            <option value="ADMIN">Administrador</option>
+            <option value="PREMIUM">Premium</option>
+            <option value="GUEST">Invitado</option>
+            <option value="FREE">Gratuito</option>
+          </select>
+          @if (myForm.get('role')?.invalid && myForm.get('role')?.touched) {
+          <div class="label">
+            <span class="label-text-alt text-error text-sm mt-1"
+              >Rol requerido</span
+            >
+          </div>
+          }
+        </div>
+
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-semibold flex items-center gap-2">
+              <svg
+                class="h-4 w-4 text-primary"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                />
+              </svg>
+              Verificación
+            </span>
+            <span class="label-text-alt text-error">*</span>
+          </label>
+          <select
+            class="select select-bordered w-full focus:select-primary font-semibold"
+            name="verified"
+            id="verified"
+            formControlName="verified"
+          >
+            <option value="" disabled selected>
+              Seleccione una verificación
+            </option>
+            <option value="true">Verificado</option>
+            <option value="false">No verificado</option>
+          </select>
+          @if (myForm.get('verified')?.invalid &&
+          myForm.get('verified')?.touched) {
+          <div class="label">
+            <span class="label-text-alt text-error text-sm mt-1"
+              >Verificación requerida</span
+            >
+          </div>
+          }
+        </div>
+
+        @if (messageSuccess()) {
+        <div class="alert alert-success">
+          <svg
+            class="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+          <span>{{ messageSuccess() }}</span>
+        </div>
+        } @if (messageError()) {
+        <div class="alert alert-error">
+          <svg
+            class="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+          <span>{{ messageError() }}</span>
+        </div>
+        }
+
+        <div
+          class="flex flex-col sm:flex-row justify-end gap-3 w-full sm:w-auto pt-6 border-t border-base-300"
+        >
+          <button
+            type="button"
+            class="btn btn-outline btn-ghost w-full sm:w-auto"
+            (click)="onClose.emit()"
+            [class.btn-disabled]="isLoading() || messageSuccess()"
+          >
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary btn-wide w-full sm:w-auto"
+            [disabled]="myForm.invalid || isLoading()"
+            [class.btn-disabled]="
+              myForm.invalid || isLoading() || messageSuccess()
+            "
+          >
+            @if (!isLoading()) {
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            Crear Enlace } @else {
+            <span class="w-full sm:w-auto loading loading-spinner"></span>
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

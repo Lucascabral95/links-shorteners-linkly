@@ -1,0 +1,165 @@
+<div class="container-main" style="font-family: Inter, 'Noto Sans', sans-serif">
+  <div>
+    <div>
+      <div>
+        <div class="flex flex-wrap justify-between gap-3 p-4">
+          <div class="flex min-w-72 flex-col gap-3">
+            <p
+              class="text-base-content tracking-light text-[32px] font-bold leading-tight"
+            >
+              Detalles del enlace
+            </p>
+            <p class="text-base-content/80 text-sm font-normal leading-normal">
+              View analytics for your shortened link.
+            </p>
+          </div>
+        </div>
+        <h2
+          class="text-base-content text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5"
+        >
+          Información del enlace
+        </h2>
+        <div class="p-4 grid grid-cols-[20%_1fr] gap-x-6">
+          <div
+            class="col-span-2 grid grid-cols-subgrid border-t border-t-base-content/10 py-5"
+          >
+            <p class="text-base-content/60 text-sm font-normal leading-normal">
+              Título
+            </p>
+            <p class="text-base-content text-sm font-normal leading-normal">
+              {{ linkData()?.link?.title }}
+            </p>
+          </div>
+          <div
+            class="col-span-2 grid grid-cols-subgrid border-t border-t-base-content/10 py-5"
+          >
+            <p class="text-base-content/60 text-sm font-normal leading-normal">
+              URL original
+            </p>
+            <p class="text-base-content text-sm font-normal leading-normal">
+              {{ linkData()?.link?.originalUrl }}
+            </p>
+          </div>
+          <div
+            class="col-span-2 grid grid-cols-subgrid border-t border-t-base-content/10 py-5"
+          >
+            <p class="text-base-content/60 text-sm font-normal leading-normal">
+              Código corto
+            </p>
+            <p class="text-base-content text-sm font-normal leading-normal">
+              {{ linkData()?.link?.shortCode }}
+            </p>
+          </div>
+          <div
+            class="col-span-2 grid grid-cols-subgrid border-t border-t-base-content/10 py-5"
+          >
+            <p class="text-base-content/60 text-sm font-normal leading-normal">
+              Alias personalizado
+            </p>
+            <p class="text-base-content text-sm font-normal leading-normal">
+              {{ linkData()?.link?.customAlias }}
+            </p>
+          </div>
+          <div
+            class="col-span-2 grid grid-cols-subgrid border-t border-t-base-content/10 py-5"
+          >
+            <p class="text-base-content/60 text-sm font-normal leading-normal">
+              Descripción
+            </p>
+            <p class="text-base-content text-sm font-normal leading-normal">
+              {{ linkData()?.link?.description }}
+            </p>
+          </div>
+          <div
+            class="col-span-2 grid grid-cols-subgrid border-t border-t-base-content/10 py-5"
+          >
+            <p class="text-base-content/60 text-sm font-normal leading-normal">
+              Categoría
+            </p>
+            <p class="text-base-content text-sm font-normal leading-normal">
+              {{ linkData()?.link?.category }}
+            </p>
+          </div>
+        </div>
+        <h2
+          class="text-base-content text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5"
+        >
+          Analíticas generales
+        </h2>
+        <div class="flex flex-wrap gap-4 p-4">
+          <div
+            class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl p-6 border border-base-content/10"
+          >
+            <p
+              class="text-base-content/60 text-base font-medium leading-normal"
+            >
+              Total Clicks
+            </p>
+            <p
+              class="text-base-content tracking-light text-2xl font-bold leading-tight"
+            >
+              {{ linkData()?.totalClicks }}
+            </p>
+          </div>
+        </div>
+        <h2
+          class="text-base-content text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5"
+        >
+          Información del usuario
+        </h2>
+        <div class="p-4 grid grid-cols-[20%_1fr] gap-x-6">
+          <div
+            class="col-span-2 grid grid-cols-subgrid border-t border-t-base-content/10 py-5"
+          >
+            <p class="text-base-content/60 text-sm font-normal leading-normal">
+              Usuario
+            </p>
+            <p class="text-base-content text-sm font-normal leading-normal">
+              {{ linkData()?.link?.user?.full_name }}
+            </p>
+          </div>
+          <div
+            class="col-span-2 grid grid-cols-subgrid border-t border-t-base-content/10 py-5"
+          >
+            <p class="text-base-content/60 text-sm font-normal leading-normal">
+              Email
+            </p>
+            <p class="text-base-content text-sm font-normal leading-normal">
+              {{ linkData()?.link?.user?.email }}
+            </p>
+          </div>
+        </div>
+        <h2
+          class="text-base-content mb-6 text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5"
+        >
+          Distribución de clicks
+        </h2>
+
+        <div class="w-full px-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div
+              class="min-h-[300px] w-full overflow-hidden rounded-lg bg-base-100 shadow"
+            >
+              <div class="h-[300px] bg-white w-full p-2" #chartCountries></div>
+            </div>
+            <div
+              class="min-h-[300px] w-full overflow-hidden rounded-lg bg-base-100 shadow"
+            >
+              <div class="h-[300px] bg-white w-full p-2" #chartCities></div>
+            </div>
+            <div
+              class="min-h-[300px] w-full overflow-hidden rounded-lg bg-base-100 shadow"
+            >
+              <div class="h-[300px] bg-white w-full p-2" #chartDevices></div>
+            </div>
+            <div
+              class="min-h-[300px] w-full overflow-hidden rounded-lg bg-base-100 shadow"
+            >
+              <div class="h-[300px] bg-white w-full p-2" #chartBrowsers></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
