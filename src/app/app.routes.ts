@@ -50,9 +50,10 @@ export const routes: Routes = [
         children: usersRoutes,
       },
       {
-        path: '**',
+        path: '',
         redirectTo: 'my-links',
-      }
+        pathMatch: 'full'
+      },
     ]
   },
   {
