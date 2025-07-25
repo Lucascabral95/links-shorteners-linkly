@@ -1,4 +1,5 @@
 import { Routes } from "@angular/router";
+import GoogleCallbackComponent from "./pages/google-callback/google-callback/google-callback.component";
 
 const authRoutes: Routes = [
   {
@@ -16,6 +17,9 @@ const authRoutes: Routes = [
   {
     path: "reset/confirm-password",
     loadComponent: () => import("./pages/reset-password/reset-password-change/reset-password-change.component")
+  }, {
+    path: "google-callback",
+    component: GoogleCallbackComponent,
   },
   {
     path: "**",

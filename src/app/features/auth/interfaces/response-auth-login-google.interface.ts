@@ -4,3 +4,7 @@ export interface ResponseAuthLoginGoogleInterface {
   full_name: string;
   picture: string;
 }
+
+export interface ResponseGoogleAuthInterface {
+  access_token: string;
+}

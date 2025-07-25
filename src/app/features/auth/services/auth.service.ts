@@ -1,9 +1,9 @@
 import { inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap, catchError, throwError } from 'rxjs';
+import { Observable, tap, catchError, throwError, of } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
-import { CreateAuthLoginInterface, CreateAuthRegisterInterface, CreateResetPasswordConfirmInterface, CreateResetPasswordRequestInterface, ResponseAuthLoginGoogleInterface, ResponseAuthLoginInterface, ResponseAuthRegisterInterface, ResponseResetPasswordConfirmInterface, Role } from '../interfaces';
+import { CreateAuthLoginInterface, CreateAuthRegisterInterface, CreateResetPasswordConfirmInterface, CreateResetPasswordRequestInterface, ResponseAuthLoginGoogleInterface, ResponseAuthLoginInterface, ResponseAuthRegisterInterface, ResponseGoogleAuthInterface, ResponseResetPasswordConfirmInterface, Role } from '../interfaces';
 import PayloadJWTInterface from '../interfaces/payload-jwt.interface';
 import { isPlatformBrowser } from '@angular/common';
 
@@ -61,8 +61,28 @@ export class AuthService {
     );
   }
 
+  // Login wtih Google OAuth
   loginGoogle(): void {
     window.location.href = `${environment.apiUrl}/auth/google`;
+  }
+
+  handleGoogleCallback(): void {
+    if (!this.isBrowser) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('accessToken');
+
+    if (token) {
+      localStorage.setItem(STORAGE_KEY_AUTH, token);
+      this.isAuthenticated.set(true);
+      this.router.navigate(['/dashboard/my-links']);
+    } else {
+      this.router.navigate(['/auth/login'], {
+        queryParams: {
+          google: 'failed'
+        }
+      });
+    }
   }
 
   register(createAuthRegister: CreateAuthRegisterInterface): Observable<ResponseAuthRegisterInterface> {
