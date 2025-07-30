@@ -1,38 +1,36 @@
 <section class="container-main">
-  <div
-    class="flex flex-col items-center justify-between gap-4 sm:flex-row sm:items-center mt-12 mb-2"
-  >
-    <div class="mb-4">
-      <h2 class="title-seccion">Mis enlaces</h2>
-      <p class="description-section">
-        Analizá todos los enlaces acortados que creaste.
-      </p>
-    </div>
-
-    <button
-      class="btn btn-primary w-full sm:w-auto mt-2 sm:mt-0"
-      (click)="showModal.set(true)"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-        class="size-5"
-      >
-        <path
-          d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z"
-        />
-      </svg>
-      Crear enlace
-    </button>
+  <div class="mb-4">
+    <h2 class="title-seccion">Mis enlaces</h2>
+    <p class="description-section">
+      Analizá todos los enlaces acortados que creaste.
+    </p>
   </div>
+
+  <button
+    class="btn btn-primary w-full mb-4 sm:mb-6 sm:w-auto mt-2 sm:mt-0"
+    (click)="showModal.set(true)"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      class="size-5"
+    >
+      <path
+        d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z"
+      />
+    </svg>
+    Crear enlace
+  </button>
 
   <div
     class="mb-8 flex flex-col sm:flex-row justify-between items-center gap-4"
   >
-    <fieldset class="fieldset">
-      <legend class="fieldset-legend text-primary">Búsqueda por título</legend>
-      <label class="input input-primary">
+    <fieldset class="fieldset w-full sm:w-auto mb-1 sm:mb-0">
+      <legend class="fieldset-legend text-primary w-full">
+        Búsqueda por título
+      </legend>
+      <label class="input input-primary w-full">
         <svg
           class="h-[1em] opacity-50"
           xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +50,7 @@
         <input
           (input)="searchTitle($event)"
           type="search"
-          class="grow"
+          class="grow w-full"
           placeholder="Buscar por título..."
         />
       </label>
@@ -113,7 +111,7 @@
                     : 'Enlace inactivo'
                 "
               ></span>
-              <a [routerLink]="['/dashboard/my-links/detail', link.shortCode]">
+              <a [routerLink]="['/dashboard/my-links/detail', link.id]">
                 <h3
                   class="truncate text-lg font-semibold text-base-content hover:underline cursor-pointer"
                 >
@@ -139,7 +137,7 @@
               </a>
 
               <button
-                (click)="openLink(link.shortCode)"
+                (click)="openLink(link.shortCode, link.user!.id)"
                 class="btn btn-sm btn-primary mt-2 w-fit"
               >
                 <i class="fas fa-external-link-alt text-sm"></i>

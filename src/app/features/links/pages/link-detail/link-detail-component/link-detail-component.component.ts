@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LinksService } from '../../../service/links.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { GetStatsLinkByIDInterface } from '../../../interfaces/get-stats-link-by-id.interface';
+import { ErrorRequestDetailComponent } from "../../../../../shared/components/errors/error-request-detail/error-request-detail/error-request-detail.component";
 
 declare var ApexCharts: any;
 
@@ -10,7 +11,7 @@ const MAX_CATEGORIES = 5;
 
 @Component({
   selector: 'app-link-detail-component',
-  imports: [],
+  imports: [ErrorRequestDetailComponent],
   standalone: true,
   templateUrl: './link-detail-component.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,7 +46,6 @@ export default class LinkDetailComponentComponent implements OnDestroy {
         this.loading.set(false)
         this.linkData.set(res)
 
-        console.log(res)
         const countriesNumber = res?.countries.map((country) => country?._count.country ?? 0).slice(0, MAX_CATEGORIES)
         const countriesData = res?.countries.map((country) => country?.country ?? 'Unknown').slice(0, MAX_CATEGORIES)
         this.createChartCountry(countriesNumber, countriesData);

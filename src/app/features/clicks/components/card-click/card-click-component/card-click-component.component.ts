@@ -2,10 +2,11 @@ import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
 import { Click } from '../../../interfaces/get-clicks.interface';
 import { ToastComponentComponent } from '../../../../../shared/components/toast/toast-component/toast-component.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'card-click-component',
-  imports: [DatePipe, ToastComponentComponent],
+  imports: [DatePipe, ToastComponentComponent, RouterLink],
   templateUrl: './card-click-component.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

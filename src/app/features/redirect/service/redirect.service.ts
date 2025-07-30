@@ -16,12 +16,13 @@ export class RedirectService {
   clickService = inject(ClicksService)
   linkService = inject(LinksService)
 
-  getRedirectById(url: string, linkId: string, userId: string): Observable<void> {
+  getRedirectByIdWithoutUserIdAndQueryParameter(url: string, linkid: string, uid: string | null): Observable<void> {
+
     window.location.href = url;
 
-    this.clickService.createClick({
-      linkId: linkId,
-      userId: userId
+    this.clickService.createClickWithoutUserIdAndQueryParameter({
+      linkid: linkid,
+      uid: uid,
     }).subscribe()
 
     return of()

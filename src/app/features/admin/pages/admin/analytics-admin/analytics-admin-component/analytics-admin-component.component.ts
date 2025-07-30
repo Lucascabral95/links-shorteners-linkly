@@ -11,4 +11,5 @@ import { AnalyticsGeographicComponentComponent } from "../../../../components/an
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class AnalyticsAdminComponent {
+
 }

@@ -3,7 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
 import { PaginationClickInterface } from '../interfaces/pagination-click.interface';
-import { CreateClickInterface, GetClickByIDInterface, GetClicksInterface } from '../interfaces';
+import { CreateClickInterface, CreateClickWithoutUserIdInterface, GetClickByIDInterface, GetClicksInterface, GetClickStatsByIDInterface, ResponseClickWithoutUserIdInterface } from '../interfaces';
 
 const API_URL = environment.apiUrl
 
@@ -65,5 +65,27 @@ export class ClicksService {
       linkId: linkId,
       userId: userId,
     })
+  }
+
+  getStatsOfClick(clickId: string): Observable<GetClickStatsByIDInterface> {
+    return this.http.get<GetClickStatsByIDInterface>(`${API_URL}/clicks/stats/${clickId}`)
+  }
+
+  createClickWithoutUserIdAndQueryParameter({ linkid, uid }: CreateClickWithoutUserIdInterface): Observable<ResponseClickWithoutUserIdInterface> {
+    const userAgent = window.navigator.userAgent;
+
+    const params: { [key: string]: string } = {
+      linkid: linkid,
+    };
+    if (uid) {
+      params['uid'] = uid;
+    }
+
+    return this.http.get<ResponseClickWithoutUserIdInterface>(`${API_URL}/clicks/request/data`, {
+      params,
+      headers: {
+        'user-agent': userAgent,
+      }
+    });
   }
 }

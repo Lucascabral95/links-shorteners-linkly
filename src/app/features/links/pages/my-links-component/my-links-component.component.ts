@@ -217,8 +217,12 @@ export default class MyLinksComponentComponent {
     this.showUpdateModal.set(true);
   }
 
-  openLink(shortCode: string) {
-    this.router.navigate(['/r', shortCode])
+  openLink(shortCode: string, uid: string | null) {
+    this.router.navigate(['/r', shortCode],
+      {
+        queryParams: {
+          uid: uid
+        }
+      })
   }
-
 }

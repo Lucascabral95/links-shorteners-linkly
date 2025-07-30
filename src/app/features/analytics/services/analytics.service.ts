@@ -3,6 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
 import { GetClicksInterface } from '../../clicks/interfaces';
+import { GetUserDataByIDInterface } from '../interfaces/get-user-data-by-id.interface';
 
 const API_URL = environment.apiUrl
 
@@ -24,6 +25,10 @@ export class AnalyticsService {
         this.clicksArray.set(res)
       })
     )
+  }
+
+  getUserDataByIdAnalytics(userId: string): Observable<GetUserDataByIDInterface> {
+    return this.http.get<GetUserDataByIDInterface>(`${API_URL}/users/data/${userId}`)
   }
 
 }

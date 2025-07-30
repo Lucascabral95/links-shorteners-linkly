@@ -49,8 +49,6 @@ export class AnalyticsGeographicComponentComponent implements AfterViewInit, OnD
       const browsers = res.browsers.map(i => i.browser ?? 'Unknown').slice(0, MAX_CATEGORIES)
       const quantityBrowsers = res.browsers.map(i => i._count.browser).slice(0, MAX_CATEGORIES)
       this.createChart4(quantityBrowsers, browsers)
-
-      console.log(res)
     })
   }
 

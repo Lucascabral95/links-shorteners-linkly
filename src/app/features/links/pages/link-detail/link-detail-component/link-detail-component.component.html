@@ -1,3 +1,5 @@
+@if (errors().message === null) {
+
 <div class="container-main" style="font-family: Inter, 'Noto Sans', sans-serif">
   <div>
     <div>
@@ -10,7 +12,7 @@
               Detalles del enlace
             </p>
             <p class="text-base-content/80 text-sm font-normal leading-normal">
-              View analytics for your shortened link.
+              Mirá los detalles del enlace.
             </p>
           </div>
         </div>
@@ -27,7 +29,11 @@
               Título
             </p>
             <p class="text-base-content text-sm font-normal leading-normal">
-              {{ linkData()?.link?.title }}
+              {{
+                linkData()?.link?.title === ""
+                  ? "No posee"
+                  : linkData()?.link?.title
+              }}
             </p>
           </div>
           <div
@@ -36,7 +42,11 @@
             <p class="text-base-content/60 text-sm font-normal leading-normal">
               URL original
             </p>
-            <p class="text-base-content text-sm font-normal leading-normal">
+            <p
+              [class.text-base-content]="linkData()?.link?.originalUrl !== ''"
+              [class.text-error]="linkData()?.link?.originalUrl === ''"
+              class="text-sm font-normal leading-normal"
+            >
               {{ linkData()?.link?.originalUrl }}
             </p>
           </div>
@@ -56,8 +66,16 @@
             <p class="text-base-content/60 text-sm font-normal leading-normal">
               Alias personalizado
             </p>
-            <p class="text-base-content text-sm font-normal leading-normal">
-              {{ linkData()?.link?.customAlias }}
+            <p
+              [class.text-base-content]="linkData()?.link?.customAlias !== ''"
+              [class.text-error]="linkData()?.link?.customAlias === ''"
+              class="text-sm font-normal leading-normal"
+            >
+              {{
+                linkData()?.link?.customAlias === ""
+                  ? "No posee"
+                  : linkData()?.link?.customAlias
+              }}
             </p>
           </div>
           <div
@@ -66,8 +84,16 @@
             <p class="text-base-content/60 text-sm font-normal leading-normal">
               Descripción
             </p>
-            <p class="text-base-content text-sm font-normal leading-normal">
-              {{ linkData()?.link?.description }}
+            <p
+              [class.text-base-content]="linkData()?.link?.description !== ''"
+              [class.text-error]="linkData()?.link?.description === ''"
+              class="text-sm font-normal leading-normal"
+            >
+              {{
+                linkData()?.link?.description === ""
+                  ? "No posee"
+                  : linkData()?.link?.description
+              }}
             </p>
           </div>
           <div
@@ -76,8 +102,26 @@
             <p class="text-base-content/60 text-sm font-normal leading-normal">
               Categoría
             </p>
+            <p
+              [class.text-base-content]="linkData()?.link?.category !== ''"
+              [class.text-error]="linkData()?.link?.category === ''"
+              class="text-sm font-normal leading-normal"
+            >
+              {{
+                linkData()?.link?.category === ""
+                  ? "No posee"
+                  : linkData()?.link?.category
+              }}
+            </p>
+          </div>
+          <div
+            class="col-span-2 grid grid-cols-subgrid border-t border-t-base-content/10 py-5"
+          >
+            <p class="text-base-content/60 text-sm font-normal leading-normal">
+              Fecha de creación
+            </p>
             <p class="text-base-content text-sm font-normal leading-normal">
-              {{ linkData()?.link?.category }}
+              {{ linkData()?.link?.created_at }}
             </p>
           </div>
         </div>
@@ -96,6 +140,7 @@
               Total Clicks
             </p>
             <p
+              [class.text-error]="linkData()?.totalClicks === 0"
               class="text-base-content tracking-light text-2xl font-bold leading-tight"
             >
               {{ linkData()?.totalClicks }}
@@ -163,3 +208,6 @@
     </div>
   </div>
 </div>
+} @else {
+<error-request-detail [detailError]="errors()" />
+}

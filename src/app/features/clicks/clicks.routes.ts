@@ -6,6 +6,10 @@ export const clicksRoutes: Routes = [
     loadComponent: () => import('./pages/clicks/clicks.component')
   },
   {
+    path: 'detail/:id',
+    loadComponent: () => import('./pages/click-details/click-detail-component/click-detail-component.component')
+  },
+  {
     path: '**',
     redirectTo: ''
   }

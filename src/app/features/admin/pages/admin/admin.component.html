@@ -89,7 +89,7 @@
           class="text-gray-500 text-sm font-bold mb-1"
           routerLinkActive="text-neutral-content"
         >
-          Total de analytics
+          Analíticas totales
         </p>
         <p class="text-2xl font-bold" routerLinkActive="text-neutral-content">
           @if(isLoading()) {
@@ -98,7 +98,8 @@
              @if(error().message !== null) {
                <p class="text-red-600 text-lg mt-2"> Error {{ error().message }} </p>
              } @else {
-               {{ quantityClicks() }}
+               <!-- {{ quantityClicks() }} -->
+                 7
              }
           }
         </p>

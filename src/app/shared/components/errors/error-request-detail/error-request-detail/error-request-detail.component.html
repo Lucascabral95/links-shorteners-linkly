@@ -1,0 +1,43 @@
+<div
+  class="flex items-center justify-center mt-0 p-4 font-sans w-full h-[calc(100vh-64px-32px)] sm:h-[calc(100vh-64px-48px)]"
+>
+  <div class="rounded-xl shadow-xl p-8 max-w-sm w-full bg-neutral">
+    <div class="flex justify-center mb-6">
+      <div class="bg-red-100 rounded-full p-4">
+        <svg
+          class="h-12 w-12 text-red-500"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+          />
+        </svg>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <h2 class="text-2xl font-bold mb-2">¡Ups! Algo salió mal</h2>
+      <p class="text-slate-600 mb-4">
+        {{ detailError().message }}
+      </p>
+      <p class="text-xs text-slate-400 font-mono tracking-wider mb-6">
+        CÓDIGO: {{ detailError().code }}
+      </p>
+    </div>
+
+    <div class="w-full flex justify-center items-center">
+      <a
+        routerLink="/dashboard/my-links"
+        class="w-full flex justify-center items-center cursor-pointer bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75"
+      >
+        Volver al inicio
+      </a>
+    </div>
+  </div>
+</div>

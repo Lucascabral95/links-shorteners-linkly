@@ -7,6 +7,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { LinksService } from '../../../links/service/links.service';
 import { GetLinkByIDInterface } from '../../../links/interfaces';
 import { ErrorRedirectComponent } from "../../components/error-redirect/error-redirect/error-redirect.component";
+import { AuthService } from '../../../auth/services/auth.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 const COUNTER_REDIRECT = environment.DIRECT_LINK
 
@@ -22,6 +24,7 @@ export default class RedirectComponent implements OnInit, OnDestroy {
   linkService = inject(LinksService)
   router = inject(Router)
   route = inject(ActivatedRoute)
+  authService = inject(AuthService)
 
   idCurrent = signal<string | null>(null)
   private countdownInterval: any;
@@ -30,16 +33,17 @@ export default class RedirectComponent implements OnInit, OnDestroy {
   errors = signal<{ message: string, code: number }>({ message: '', code: 0 })
   pauseRedirect = signal<boolean>(false)
   dataLink = signal<GetLinkByIDInterface | null>(null)
-
+  myUserIdAuthenticated = signal<string | null>(this.authService.getUserId() || null)
+  uid = signal<string | null>(null)
   private readonly CIRCUMFERENCE = 339.292;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
   ngOnInit(): void {
-    //const paramId = this.route.snapshot.params['id']
     const paramId = this.route.snapshot.params['code']
-    // const paramCode = this.route.snapshot.params['code']
+    const uid = this.route.snapshot.queryParamMap.get('uid') || null;
     this.idCurrent.set(paramId)
+    this.uid.set(uid)
 
     if (isPlatformBrowser(this.platformId)) {
       this.startCountDown()
@@ -73,7 +77,8 @@ export default class RedirectComponent implements OnInit, OnDestroy {
 
       if (this.counter() === 0) {
         clearInterval(this.countdownInterval)
-        this.redirect(this.dataLink()?.originalUrl!, this.dataLink()?.id!, this.dataLink()?.userId!)
+
+        this.redirectWithoutUserIdAndQueryParameter(this.dataLink()?.originalUrl!, this.dataLink()?.id!, this.uid() || '')
 
         this.loading.set(true)
         this.errors.set({ message: '', code: 0 })
@@ -81,8 +86,11 @@ export default class RedirectComponent implements OnInit, OnDestroy {
     }, 1000)
   }
 
-  redirect(url: string, linkId: string, userId: string) {
-    this.redirectService.getRedirectById(url, linkId, userId).subscribe({
+  redirectWithoutUserIdAndQueryParameter(url: string, linkId: string, uid: string) {
+    console.log(`El valor de uid es: ${uid}`);
+    console.log('🔗 linkId:', linkId);
+
+    this.redirectService.getRedirectByIdWithoutUserIdAndQueryParameter(url, linkId, uid).subscribe({
       next: (response) => {
         console.log('Redirect obtenido:', response);
       },

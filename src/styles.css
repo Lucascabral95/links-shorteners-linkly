@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
 @plugin "daisyui" {
-  /* themes: corporate --default, dark --prefersdark; */
   themes: valentine --default, dark --prefersdark;
 }
 
@@ -35,6 +34,25 @@ body {
   .title-section-analytics {
     @apply text-base-content text-center font-medium text-2xl mt-2 mb-10;
   }
+
+  .stat-card {
+    @apply bg-base-200 rounded-xl shadow-lg p-6 flex items-center space-x-6;
+  }
+  .stat-icon {
+    @apply rounded-full p-3 flex-shrink-0;
+  }
+  .stat-info {
+    @apply flex-grow;
+  }
+  .stat-title {
+    @apply text-gray-500 dark:text-gray-400 font-medium;
+  }
+  .stat-value {
+    @apply text-3xl font-bold;
+  }
+  .chart-card {
+    @apply bg-white p-4 rounded-xl shadow-lg h-[400px] sm:h-[420px];
+  }
 }
 
 @keyframes fade-in-up {
@@ -47,6 +65,34 @@ body {
     transform: translateY(0);
   }
 }
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out forwards;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
 .animate-fade-in-up {
   animation: fade-in-up 0.5s ease-out forwards;
 }
