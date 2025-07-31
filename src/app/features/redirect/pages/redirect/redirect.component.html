@@ -120,6 +120,10 @@
         </div>
       </div>
 
+      <h1 class="text-red-700 text-2xl">
+        El linkid por parameter: {{ idCurrent() }}
+      </h1>
+
       <div class="mt-8 flex justify-center space-x-4">
         <button
           (click)="redirectNow()"
@@ -168,3 +172,12 @@
     }
   </div>
 </section>
+
+@if(showModalPassword()) {
+<modal-link-password-component
+  (close)="closeModalPassword()"
+  [short]="linkId()"
+  [uid]="uid()"
+  [url]="url()"
+/>
+}

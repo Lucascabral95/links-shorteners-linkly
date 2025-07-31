@@ -121,9 +121,20 @@
             </div>
             <div class="mt-2 flex flex-col gap-x-4 gap-y-1 pl-6 text-sm">
               <a
-                [href]="myFrontend + '/' + link.shortCode"
-                target="_blank"
-                class="font-medium text-primary hover:underline"
+                [href]="
+                  !isLinkExpired(link.expiresAt)
+                    ? myFrontend + '/' + link.shortCode
+                    : null
+                "
+                [attr.target]="!isLinkExpired(link.expiresAt) ? '_blank' : null"
+                [class.cursor-not-allowed]="isLinkExpired(link.expiresAt)"
+                class="font-medium hover:underline"
+                [class.text-primary]="!isLinkExpired(link.expiresAt)"
+                [class.text-error]="isLinkExpired(link.expiresAt)"
+                [class.pointer-events-none]="isLinkExpired(link.expiresAt)"
+                [class.opacity-50]="isLinkExpired(link.expiresAt)"
+                [class.hover:underline]="!isLinkExpired(link.expiresAt)"
+                [class.line-through]="isLinkExpired(link.expiresAt)"
               >
                 {{ myFrontend }}/{{ link.shortCode }}
               </a>
@@ -139,11 +150,39 @@
               <button
                 (click)="openLink(link.shortCode, link.user!.id)"
                 class="btn btn-sm btn-primary mt-2 w-fit"
+                [class.cursor-not-allowed]="isLinkExpired(link.expiresAt)"
+                [class.pointer-events-none]="isLinkExpired(link.expiresAt)"
+                [class.opacity-50]="isLinkExpired(link.expiresAt)"
+                [class.hover:underline]="!isLinkExpired(link.expiresAt)"
+                [class.line-through]="isLinkExpired(link.expiresAt)"
+                [class.btn-primary]="
+                  !link.password && !isLinkExpired(link.expiresAt)
+                "
+                [class.btn-secondary]="
+                  link.password && !isLinkExpired(link.expiresAt)
+                "
               >
                 <i class="fas fa-external-link-alt text-sm"></i>
-                Ir al enlace
+                <!-- Ir al enlace -->
+                @if (isLinkExpired(link.expiresAt)) { Enlace expirado }
+                <!-- -- -->
+                @else if (link.password) { Ir con contraseña }
+                <!-- -- -->
+                @else { Ir al enlace }
               </button>
             </div>
+          </div>
+
+          <div class="flex items-start">
+            @if (link.password) {
+            <div
+              class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary/10 to-transparent border border-primary/20 text-primary text-xs font-medium whitespace-nowrap animate-in fade-in duration-300"
+              title="Este enlace está protegido con contraseña"
+            >
+              <i class="fas fa-lock text-xs"></i>
+              <span>Protegido</span>
+            </div>
+            }
           </div>
 
           <div class="flex items-center gap-1 self-end sm:self-start">

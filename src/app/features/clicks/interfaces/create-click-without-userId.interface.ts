@@ -1,5 +1,5 @@
 export interface CreateClickWithoutUserIdInterface {
-  linkid: string;
+  short: string;
   uid?: string | null;
 }
 

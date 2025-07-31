@@ -2,7 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../environments/environment.development';
 import { Observable, tap } from 'rxjs';
-import { CreateLinkInterface, GetLinkByIDInterface, GetLinksInterface, Link, ParamsLinkInterface, ResponseCreateLinkInterface, UpdateLinkInterface } from '../interfaces';
+import { CreateLinkInterface, GetLinkByIDInterface, GetLinksInterface, Link, ParamsLinkInterface, PasswordVerifyLinkInterface, ResponseCreateLinkInterface, ResponseVerifyLinkInterface, ResponseVerifyPasswordGetInterface, UpdateLinkInterface } from '../interfaces';
 import { ResponseUpdateLinkInterface } from '../interfaces/response-update-link.interface';
 import { Role } from '../../auth/interfaces';
 import { GetStatsLinkByIDInterface } from '../interfaces/get-stats-link-by-id.interface';
@@ -196,7 +196,17 @@ export class LinksService {
     )
   }
 
-  getStatsOfLink(linkId: string): Observable<GetStatsLinkByIDInterface> {
-    return this.http.get<GetStatsLinkByIDInterface>(`${API_URL}/links/stats/${linkId}`)
+  getStatsOfLink(short: string): Observable<GetStatsLinkByIDInterface> {
+    return this.http.get<GetStatsLinkByIDInterface>(`${API_URL}/links/stats/${short}`)
+  }
+
+  verifyPasswordOfLinkGet(short: string): Observable<ResponseVerifyPasswordGetInterface> {
+    return this.http.get<ResponseVerifyPasswordGetInterface>(`${API_URL}/links/password/${short}`)
+  }
+
+  verifyPasswordOfLinkPost(short: string, passwordVerifyLinkInterface: PasswordVerifyLinkInterface): Observable<ResponseVerifyLinkInterface> {
+    return this.http.post<ResponseVerifyLinkInterface>(`${API_URL}/links/password/${short}`, {
+      password: passwordVerifyLinkInterface.password
+    })
   }
 }

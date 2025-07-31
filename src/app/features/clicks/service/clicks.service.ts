@@ -71,11 +71,11 @@ export class ClicksService {
     return this.http.get<GetClickStatsByIDInterface>(`${API_URL}/clicks/stats/${clickId}`)
   }
 
-  createClickWithoutUserIdAndQueryParameter({ linkid, uid }: CreateClickWithoutUserIdInterface): Observable<ResponseClickWithoutUserIdInterface> {
+  createClickWithoutUserIdAndQueryParameter({ short, uid }: CreateClickWithoutUserIdInterface): Observable<ResponseClickWithoutUserIdInterface> {
     const userAgent = window.navigator.userAgent;
 
     const params: { [key: string]: string } = {
-      linkid: linkid,
+      short: short,
     };
     if (uid) {
       params['uid'] = uid;

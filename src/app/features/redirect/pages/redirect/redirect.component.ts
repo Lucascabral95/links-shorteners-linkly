@@ -8,13 +8,13 @@ import { LinksService } from '../../../links/service/links.service';
 import { GetLinkByIDInterface } from '../../../links/interfaces';
 import { ErrorRedirectComponent } from "../../components/error-redirect/error-redirect/error-redirect.component";
 import { AuthService } from '../../../auth/services/auth.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ModalLinkPasswordComponentComponent } from "../../../links/components/modal-link-password/modal-link-password-component/modal-link-password-component.component";
 
 const COUNTER_REDIRECT = environment.DIRECT_LINK
 
 @Component({
   selector: 'app-redirect',
-  imports: [ErrorRedirectComponent],
+  imports: [ErrorRedirectComponent, ModalLinkPasswordComponentComponent],
   templateUrl: './redirect.component.html',
   styleUrls: ['./redirect.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,6 +36,8 @@ export default class RedirectComponent implements OnInit, OnDestroy {
   myUserIdAuthenticated = signal<string | null>(this.authService.getUserId() || null)
   uid = signal<string | null>(null)
   private readonly CIRCUMFERENCE = 339.292;
+  url = signal<string>('')
+  noPassword = signal<boolean>(false)
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
@@ -47,6 +49,15 @@ export default class RedirectComponent implements OnInit, OnDestroy {
 
     if (isPlatformBrowser(this.platformId)) {
       this.startCountDown()
+      this.linkService.verifyPasswordOfLinkGet(this.idCurrent()!).subscribe({
+        next: () => {
+          this.noPassword.set(false)
+        },
+        error: () => {
+          console.log('Error al verificar contraseña')
+          this.noPassword.set(true)
+        }
+      })
     }
   }
 
@@ -69,6 +80,7 @@ export default class RedirectComponent implements OnInit, OnDestroy {
       error: (err: HttpErrorResponse) => {
         this.errors.set({ message: err.error?.message || 'Error desconocido', code: err.status })
         this.loading.set(false)
+        this.countdownInterval = clearInterval(this.countdownInterval)
       }
     })
 
@@ -78,26 +90,23 @@ export default class RedirectComponent implements OnInit, OnDestroy {
       if (this.counter() === 0) {
         clearInterval(this.countdownInterval)
 
-        this.redirectWithoutUserIdAndQueryParameter(this.dataLink()?.originalUrl!, this.dataLink()?.id!, this.uid() || '')
+        if (this.noPassword() && this.url() !== null && this.uid() !== null) {
+          this.redirectService.getRedirectByIdWithoutUserIdAndQueryParameter(this.dataLink()?.originalUrl!, this.idCurrent()!, this.uid()!).subscribe({
+            next: () => {
+              console.log('Redirect obtenido')
+            },
+            error: (err: HttpErrorResponse) => {
+              console.log('Error al obtener redirect', err)
+            }
+          })
+        } else {
+          this.openModalPassword(this.idCurrent()!, this.dataLink()?.originalUrl!, this.uid()!)
+        }
 
         this.loading.set(true)
         this.errors.set({ message: '', code: 0 })
       }
     }, 1000)
-  }
-
-  redirectWithoutUserIdAndQueryParameter(url: string, linkId: string, uid: string) {
-    console.log(`El valor de uid es: ${uid}`);
-    console.log('🔗 linkId:', linkId);
-
-    this.redirectService.getRedirectByIdWithoutUserIdAndQueryParameter(url, linkId, uid).subscribe({
-      next: (response) => {
-        console.log('Redirect obtenido:', response);
-      },
-      error: (error) => {
-        console.error('Error al obtener redirect:', error);
-      }
-    });
   }
 
   getStrokeDashOffset(): number {
@@ -130,5 +139,24 @@ export default class RedirectComponent implements OnInit, OnDestroy {
     } else {
       this.startCountDown()
     }
+  }
+  // -------
+  showModalPassword = signal<boolean>(false)
+  linkId = signal<string>('')
+  loadingVerifyPassword = signal<boolean>(false)
+  errorsVerifyPassword = signal<{ message: string, code: number | null }>({ message: '', code: null })
+  responseVerifyPassword = signal<string | null>(null)
+  password = signal<string>('')
+
+  openModalPassword(short: string, url: string, uid: string | null) {
+    this.showModalPassword.set(true)
+    this.linkId.set(short)
+    this.url.set(url)
+    this.uid.set(uid)
+  }
+
+  closeModalPassword() {
+    this.linkId.set('')
+    this.showModalPassword.set(false)
   }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from "../../components/header/header.component";
 import { FooterComponent } from "../../components/footer/footer.component";
@@ -12,6 +12,4 @@ import { RouterLink } from '@angular/router';
   styleUrls: ['./landing-component.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class LandingComponentComponent {
-
-}
+export default class LandingComponentComponent { }
