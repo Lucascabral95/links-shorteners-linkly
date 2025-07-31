@@ -8,7 +8,7 @@
   <div class="mb-4 flex justify-between items-center">
     <fieldset class="fieldset">
       <legend class="fieldset-legend text-primary">
-        Búsqueda por dispositivo
+        Búsqueda por dispositivooooo
       </legend>
       <label class="input input-primary">
         <svg
@@ -47,6 +47,9 @@
     </fieldset>
   </div>
 
+  @if (loading()) {
+  <loading-component />
+  } @else { @if (error().message === '') {
   <div
     class="mb-10 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
   >
@@ -96,4 +99,10 @@
       Página {{ page() }} de {{ quantityPages() }}
     </div>
   </div>
+  } @else {
+  <error-requests
+    [codeError]="error().code ?? 500"
+    [messageError]="error().message"
+  />
+  } }
 </section>

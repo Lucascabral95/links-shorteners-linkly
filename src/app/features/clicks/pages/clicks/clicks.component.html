@@ -1,6 +1,6 @@
 <section class="container-main flex flex-col gap-y-4">
   <div class="mb-4">
-    <h2 class="title-seccion">Mis Clicks</h2>
+    <h2 class="title-seccion">Mis clicks</h2>
     <p class="description-section">
       Analizá todos los enlaces acortados sobre los que hiciste click.
     </p>
@@ -48,6 +48,9 @@
     </fieldset>
   </div>
 
+  @if (loading()) {
+  <loading-component />
+  } @else { @if (error().message === '') {
   <div
     class="mb-10 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
   >
@@ -97,4 +100,10 @@
       Página {{ page() }} de {{ quantityPages() }}
     </div>
   </div>
+  } @else {
+  <error-requests
+    [codeError]="error().code ?? 500"
+    [messageError]="error().message"
+  />
+  } }
 </section>

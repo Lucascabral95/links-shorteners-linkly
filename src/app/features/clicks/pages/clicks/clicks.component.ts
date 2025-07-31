@@ -6,10 +6,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CardClickComponentComponent } from "../../components/card-click/card-click-component/card-click-component.component";
 import { AuthService } from '../../../auth/services/auth.service';
 import { EmptyArrayComponent } from "../../../../shared/components/empty-array/empty-array/empty-array.component";
+import { LoadingComponentComponent } from "../../../../shared/components/loading/loading-component/loading-component.component";
+import { ErrorRequestsComponent } from "../../../../shared/components/errors/error-requests/error-requests.component";
 
 @Component({
   selector: 'app-clicks',
-  imports: [CardClickComponentComponent, EmptyArrayComponent],
+  imports: [CardClickComponentComponent, EmptyArrayComponent, LoadingComponentComponent, ErrorRequestsComponent],
   templateUrl: './clicks.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -21,7 +23,7 @@ export default class ClicksComponent {
   loading = signal<boolean>(false)
   private spinnerTimeout!: ReturnType<typeof setTimeout>;
   private errorTimeout!: ReturnType<typeof setTimeout>;
-  error = signal<{ message: string, code: number }>({ message: '', code: 0 })
+  error = signal<{ message: string, code: number | null }>({ message: '', code: null })
   userId = signal<string | undefined>(this.authService.getPayloadJWT()?.id)
 
   page = signal(1)
@@ -86,7 +88,7 @@ export default class ClicksComponent {
     this.spinnerTimeout = setTimeout(() => this.loading.set(true), 100);
 
     this.errorTimeout = setTimeout(() => {
-      this.error.set({ message: '', code: 0 });
+      this.error.set({ message: '', code: null });
     }, 500);
 
     this.clicksService.getAllClicks(this.params()).subscribe({

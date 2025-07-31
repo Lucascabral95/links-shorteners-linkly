@@ -6,10 +6,12 @@ import { PaginationClickInterface } from '../../../../../clicks/interfaces/pagin
 import { ClicksService } from '../../../../../clicks/service/clicks.service';
 import { AuthService } from '../../../../../auth/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoadingComponentComponent } from "../../../../../../shared/components/loading/loading-component/loading-component.component";
+import { ErrorRequestsComponent } from "../../../../../../shared/components/errors/error-requests/error-requests.component";
 
 @Component({
   selector: 'app-clicks-admin-component',
-  imports: [CardClickComponentComponent, EmptyArrayComponent],
+  imports: [CardClickComponentComponent, EmptyArrayComponent, LoadingComponentComponent, ErrorRequestsComponent],
   templateUrl: './clicks-admin-component.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -21,7 +23,7 @@ export default class ClicksAdminComponentComponent {
   loading = signal<boolean>(false)
   private spinnerTimeout!: ReturnType<typeof setTimeout>;
   private errorTimeout!: ReturnType<typeof setTimeout>;
-  error = signal<{ message: string, code: number }>({ message: '', code: 0 })
+  error = signal<{ message: string, code: number | null }>({ message: '', code: null })
 
   page = signal(1)
   limit = signal(30)
@@ -84,7 +86,7 @@ export default class ClicksAdminComponentComponent {
     this.spinnerTimeout = setTimeout(() => this.loading.set(true), 100);
 
     this.errorTimeout = setTimeout(() => {
-      this.error.set({ message: '', code: 0 });
+      this.error.set({ message: '', code: null });
     }, 500);
 
     this.clicksService.getAllClicks(this.params()).subscribe({

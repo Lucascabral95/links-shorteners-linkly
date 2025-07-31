@@ -1,4 +1,7 @@
 <div class="w-full flex flex-col gap-4">
+  @if (loading()) {
+  <loading-component />
+  } @else { @if (errors().message === '') {
   <div>
     <analytics-general-component />
   </div>
@@ -8,4 +11,10 @@
   <div>
     <analytics-geographic-component />
   </div>
+  } @else {
+  <error-requests
+    [messageError]="errors().message || 'Internal Server Error'"
+    [codeError]="errors().code || 500"
+  />
+  } }
 </div>
