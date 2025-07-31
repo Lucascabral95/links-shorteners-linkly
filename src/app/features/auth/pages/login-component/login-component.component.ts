@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CreateAuthLoginInterface } from '../../interfaces';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import FormUtils from '../../../../shared/utils/form-utils';
 import { HttpErrorResponse } from '@angular/common/http';
+import { SeoService } from '../../../../core/services/seo.service';
 
 @Component({
   selector: 'app-login-component',
@@ -13,11 +14,13 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './login-component.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class LoginComponentComponent {
+export default class LoginComponentComponent implements OnInit {
   authService = inject(AuthService);
+  seoService = inject(SeoService);
   fb = inject(FormBuilder);
   route = inject(ActivatedRoute);
   formUtils = FormUtils;
+  platformId = inject(PLATFORM_ID);
 
   isLoading = signal(false);
   isGoogleLoading = signal(false);
@@ -65,5 +68,11 @@ export default class LoginComponentComponent {
 
   togglePassword() {
     this.showPassword.update(show => !show);
+  }
+
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setLoginSEO();
+    }
   }
 }

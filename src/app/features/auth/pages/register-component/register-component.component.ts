@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CreateAuthRegisterInterface } from '../../interfaces';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import FormUtils from '../../../../shared/utils/form-utils';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { SeoService } from '../../../../core/services/seo.service';
 
 @Component({
   selector: 'app-register-component',
@@ -13,11 +14,13 @@ import { Router } from '@angular/router';
   templateUrl: './register-component.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class RegisterComponentComponent {
+export default class RegisterComponentComponent implements OnInit {
   authService = inject(AuthService);
   fb = inject(FormBuilder);
   formUtils = FormUtils;
   router = inject(Router);
+  seoService = inject(SeoService);
+  platformId = inject(PLATFORM_ID);
 
   isLoading = signal(false);
   showPassword = signal(false);
@@ -30,6 +33,12 @@ export default class RegisterComponentComponent {
   });
 
   successMessage = signal<string | null>(null);
+
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setRegisterSEO();
+    }
+  }
 
   onSubmit() {
     if (this.myForm.valid) {

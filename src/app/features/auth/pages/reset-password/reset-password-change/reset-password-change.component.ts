@@ -1,9 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import FormUtils from '../../../../../shared/utils/form-utils';
 import { HttpErrorResponse } from '@angular/common/http';
+import { SeoService } from '../../../../../core/services/seo.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-reset-password-change',
@@ -18,6 +20,8 @@ export default class ResetPasswordChangeComponent implements OnInit {
   router = inject(Router);
   route = inject(ActivatedRoute);
   formUtils = FormUtils;
+  seoService = inject(SeoService);
+  platformId = inject(PLATFORM_ID);
 
   isLoading = signal(false);
   errorMessage = signal('');
@@ -41,6 +45,10 @@ export default class ResetPasswordChangeComponent implements OnInit {
       }
       this.token.set(tokenParam);
     });
+
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setResetPasswordSEO();
+    }
   }
 
   onSubmit() {

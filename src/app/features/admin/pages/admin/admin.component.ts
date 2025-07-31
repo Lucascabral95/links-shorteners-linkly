@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, PLATFORM_ID, signal } from '@angular/core';
 import { AuthService } from '../../../auth/services/auth.service';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AdminService } from '../../service/admin.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, of, tap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { SeoService } from '../../../../core/services/seo.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-admin',
@@ -15,6 +17,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 export default class AdminComponent {
   authServie = inject(AuthService)
   adminService = inject(AdminService)
+  seoService = inject(SeoService)
+  platformId = inject(PLATFORM_ID)
   payload = signal(this.authServie.getPayloadJWT())
 
   isLoading = signal<boolean>(true)
@@ -47,8 +51,10 @@ export default class AdminComponent {
     return this.analyticsData()?.totalClicks || 0
   })
 
-
   ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setAdminSEO();
+    }
     this.payload()
   }
 }

@@ -1,11 +1,13 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, AfterViewInit, signal, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, AfterViewInit, signal, ViewChild, OnInit } from '@angular/core';
 import { ClicksService } from '../../../service/clicks.service';
 import { GetClickStatsByIDInterface } from '../../../interfaces';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { DatePipe } from '@angular/common';
+import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { ErrorRequestDetailComponent } from '../../../../../shared/components/errors/error-request-detail/error-request-detail/error-request-detail.component';
 import { ChartHelpers } from '../../../../../shared/utils/helpers/chart.analytics-personals';
+import { PLATFORM_ID } from '@angular/core';
+import { SeoService } from '../../../../../core/services/seo.service';
 
 declare var ApexCharts: any;
 const MAX_CATEGORIES = 5;
@@ -16,7 +18,7 @@ const MAX_CATEGORIES = 5;
   templateUrl: './click-detail-component.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class ClickDetailComponentComponent implements AfterViewInit {
+export default class ClickDetailComponentComponent implements AfterViewInit, OnInit {
   @ViewChild('chartCountries') countriesChart!: ElementRef<HTMLDivElement>
   @ViewChild('citiesChart') citiesChart!: ElementRef<HTMLDivElement>
   @ViewChild('devicesChart') devicesChart!: ElementRef<HTMLDivElement>
@@ -25,6 +27,8 @@ export default class ClickDetailComponentComponent implements AfterViewInit {
   clickService = inject(ClicksService)
   route = inject(ActivatedRoute)
   getInnerHtml = ChartHelpers
+  seoService = inject(SeoService)
+  platformId = inject(PLATFORM_ID)
 
   chartCountries: any = null
   chartCities: any = null
@@ -64,6 +68,12 @@ export default class ClickDetailComponentComponent implements AfterViewInit {
         this.errors.set({ message: err.error.message, code: err.status })
       }
     })
+  }
+
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setClickDetailSEO();
+    }
   }
 
   ngOnDestroy(): void {

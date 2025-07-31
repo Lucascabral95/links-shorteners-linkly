@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { ClicksService } from '../../service/clicks.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaginationClickInterface } from '../../interfaces/pagination-click.interface';
@@ -8,6 +8,8 @@ import { AuthService } from '../../../auth/services/auth.service';
 import { EmptyArrayComponent } from "../../../../shared/components/empty-array/empty-array/empty-array.component";
 import { LoadingComponentComponent } from "../../../../shared/components/loading/loading-component/loading-component.component";
 import { ErrorRequestsComponent } from "../../../../shared/components/errors/error-requests/error-requests.component";
+import { SeoService } from '../../../../core/services/seo.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-clicks',
@@ -15,7 +17,7 @@ import { ErrorRequestsComponent } from "../../../../shared/components/errors/err
   templateUrl: './clicks.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class ClicksComponent {
+export default class ClicksComponent implements OnInit {
   clicksService = inject(ClicksService)
   authService = inject(AuthService)
   router = inject(Router)
@@ -25,6 +27,8 @@ export default class ClicksComponent {
   private errorTimeout!: ReturnType<typeof setTimeout>;
   error = signal<{ message: string, code: number | null }>({ message: '', code: null })
   userId = signal<string | undefined>(this.authService.getPayloadJWT()?.id)
+  seoService = inject(SeoService)
+  platformId = inject(PLATFORM_ID)
 
   page = signal(1)
   limit = signal(30)
@@ -63,6 +67,12 @@ export default class ClicksComponent {
 
     effect(() => this.loadData())
     effect(() => this.updateUrl())
+  }
+
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setClickSEO();
+    }
   }
 
   private updateUrl(): void {

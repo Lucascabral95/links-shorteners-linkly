@@ -9,6 +9,7 @@ import { GetLinkByIDInterface } from '../../../links/interfaces';
 import { ErrorRedirectComponent } from "../../components/error-redirect/error-redirect/error-redirect.component";
 import { AuthService } from '../../../auth/services/auth.service';
 import { ModalLinkPasswordComponentComponent } from "../../../links/components/modal-link-password/modal-link-password-component/modal-link-password-component.component";
+import { SeoService } from '../../../../core/services/seo.service';
 
 const COUNTER_REDIRECT = environment.DIRECT_LINK
 
@@ -25,6 +26,7 @@ export default class RedirectComponent implements OnInit, OnDestroy {
   router = inject(Router)
   route = inject(ActivatedRoute)
   authService = inject(AuthService)
+  seoService = inject(SeoService)
 
   idCurrent = signal<string | null>(null)
   private countdownInterval: any;
@@ -46,6 +48,10 @@ export default class RedirectComponent implements OnInit, OnDestroy {
     const uid = this.route.snapshot.queryParamMap.get('uid') || null;
     this.idCurrent.set(paramId)
     this.uid.set(uid)
+
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setRedirectSEO();
+    }
 
     if (isPlatformBrowser(this.platformId)) {
       this.startCountDown()
@@ -76,6 +82,10 @@ export default class RedirectComponent implements OnInit, OnDestroy {
       next: (res: GetLinkByIDInterface) => {
         this.dataLink.set(res)
         this.loading.set(false)
+
+        if (isPlatformBrowser(this.platformId)) {
+          this.seoService.setRedirectSEO(res, this.idCurrent()!);
+        }
       },
       error: (err: HttpErrorResponse) => {
         this.errors.set({ message: err.error?.message || 'Error desconocido', code: err.status })

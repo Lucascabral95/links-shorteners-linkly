@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { LinksService } from '../../service/links.service';
 import { AuthService } from '../../../auth/services/auth.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -9,11 +9,12 @@ import { environment } from '../../../../../environments/environment.development
 import { ToastComponentComponent } from "../../../../shared/components/toast/toast-component/toast-component.component";
 import { UpdateClickModalComponent } from "../../../clicks/components/update-click-modal/update-click-modal/update-link-modal.component";
 import { CreateLinkModalComponent } from "../../../dashboard/components/create-link-modal/create-link-modal/create-link-modal.component";
-import { DatePipe } from '@angular/common';
+import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { EmptyArrayComponent } from "../../../../shared/components/empty-array/empty-array/empty-array.component";
 import { LoadingComponentComponent } from "../../../../shared/components/loading/loading-component/loading-component.component";
 import { ErrorRequestsComponent } from "../../../../shared/components/errors/error-requests/error-requests.component";
 import { ClicksService } from '../../../clicks/service/clicks.service';
+import { SeoService } from '../../../../core/services/seo.service';
 
 const TOAST_TIME = environment.TOAST_TIME
 const MY_FRONTEND = environment.MY_FRONTEND_URL_REDIRECT
@@ -23,7 +24,7 @@ const MY_FRONTEND = environment.MY_FRONTEND_URL_REDIRECT
   templateUrl: './my-links-component.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class MyLinksComponentComponent {
+export default class MyLinksComponentComponent implements OnInit {
   linksService = inject(LinksService)
   authService = inject(AuthService)
   clickService = inject(ClicksService)
@@ -36,6 +37,8 @@ export default class MyLinksComponentComponent {
   showUpdateModal = signal<boolean>(false)
   linkIdUpdateModal = signal<string | null>(null)
   myFrontend = MY_FRONTEND
+  seoService = inject(SeoService)
+  platformId = inject(PLATFORM_ID)
 
   page = signal(1)
   limit = signal(10)
@@ -57,6 +60,12 @@ export default class MyLinksComponentComponent {
   isLinkExpired(expiresAt: Date | string | null | undefined): boolean {
     if (!expiresAt) return false;
     return new Date(expiresAt) < new Date();
+  }
+
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setMyLinksSEO();
+    }
   }
 
   params = computed(() => {

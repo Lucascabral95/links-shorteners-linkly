@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import FormUtils from '../../../../../shared/utils/form-utils';
 import { RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { SeoService } from '../../../../../core/services/seo.service';
+import { PLATFORM_ID } from '@angular/core';
 
 @Component({
   selector: 'app-forgot-password',
@@ -17,6 +19,8 @@ export default class ForgotPasswordComponent {
   authService = inject(AuthService);
   fb = inject(FormBuilder);
   formUtils = FormUtils;
+  seoService = inject(SeoService);
+  platformId = inject(PLATFORM_ID);
 
   isLoading = signal(false);
   errorMessage = signal('');
@@ -47,6 +51,12 @@ export default class ForgotPasswordComponent {
       });
     } else {
       this.myForm.markAllAsTouched();
+    }
+  }
+
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setForgotPasswordSEO();
     }
   }
 }

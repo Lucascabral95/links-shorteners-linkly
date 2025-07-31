@@ -1,13 +1,14 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, PLATFORM_ID, signal } from '@angular/core';
 import { ConfigurationService } from '../../service/configuration.service';
 import { AuthService } from '../../../auth/services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastComponentComponent } from "../../../../shared/components/toast/toast-component/toast-component.component";
-import { DatePipe } from '@angular/common';
+import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { GetUsersInterface } from '../../interfaces/get-user.interface';
 import { LoadingComponentComponent } from "../../../../shared/components/loading/loading-component/loading-component.component";
 import { ErrorRequestsComponent } from "../../../../shared/components/errors/error-requests/error-requests.component";
+import { SeoService } from '../../../../core/services/seo.service';
 
 @Component({
   selector: 'app-configuration',
@@ -22,6 +23,8 @@ export default class ConfigurationComponent {
   errors = signal<{ message: string | null, status: number | null }>({ message: null, status: null })
   fb = inject(FormBuilder)
   userId = signal<string | null>(this.authService.getUserId())
+  seoService = inject(SeoService)
+  platformId = inject(PLATFORM_ID)
 
   userData = signal<GetUsersInterface | null>(null)
 
@@ -34,6 +37,10 @@ export default class ConfigurationComponent {
   })
 
   ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setConfigurationSEO();
+    }
+
     this.loading.set(true)
     this.errors.set({ message: null, status: null })
 
