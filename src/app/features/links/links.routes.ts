@@ -7,7 +7,8 @@ export const linksRoutes: Routes = [
   },
   {
     path: 'detail/:id',
-    loadComponent: () => import('./pages/link-detail/link-detail-component/link-detail-component.component')
+    loadComponent: () => import('./pages/link-detail/link-detail-component/link-detail-component.component'),
+    data: { renderMode: 'manual' }
   },
   {
     path: '**',

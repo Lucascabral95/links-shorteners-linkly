@@ -7,7 +7,8 @@ export const clicksRoutes: Routes = [
   },
   {
     path: 'detail/:id',
-    loadComponent: () => import('./pages/click-details/click-detail-component/click-detail-component.component')
+    loadComponent: () => import('./pages/click-details/click-detail-component/click-detail-component.component'),
+    data: { renderMode: 'manual' }
   },
   {
     path: '**',
