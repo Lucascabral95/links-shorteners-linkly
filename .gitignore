@@ -48,5 +48,5 @@ mock
 Dockerfile
 compose.yaml
 
-src/environments/environment.ts
-src/environments/environment.development.ts
+# Environments
+/src/environments/**
