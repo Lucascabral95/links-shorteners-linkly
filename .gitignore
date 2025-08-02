@@ -49,9 +49,9 @@ Dockerfile
 compose.yaml
 
 # Environments
-# src/environments/environment.ts
-# src/environments/environment.development.ts
-# src/environments/environment.prod.ts
-# src/environments/environment.example.ts
+src/environments/environment.ts
+src/environments/environment.development.ts
+src/environments/environment.prod.ts
+src/environments/environment.example.ts
 
 .env*
