@@ -7,7 +7,8 @@
     "ng": "ng",
     "start": "ng serve",
     "prebuild": "node ./scripts/generate-env.js",
-    "build": "node ./scripts/generate-env.js && ng build --configuration=production",
+    "build": "ng build --configuration=production",
+    "generate-env": "node ./scripts/generate-env.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:frontend-links-shorteners": "node dist/frontend-links-shorteners/server/server.mjs"
