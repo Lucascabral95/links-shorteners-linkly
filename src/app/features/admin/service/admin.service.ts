@@ -20,7 +20,7 @@ export class AdminService {
       params: {
         page: 1,
         limit: 10000,
-        period: period ?? '30d'
+        period: period ?? '90d'
       }
     })
   }

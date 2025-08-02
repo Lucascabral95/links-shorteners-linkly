@@ -7,7 +7,6 @@ import {
   OnDestroy,
   signal,
   inject,
-  effect,
   computed
 } from '@angular/core';
 import { AdminService } from '../../../service/admin.service';

@@ -1,9 +1,9 @@
 import { inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap, catchError, throwError, of } from 'rxjs';
+import { Observable, tap, catchError, throwError } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
-import { CreateAuthLoginInterface, CreateAuthRegisterInterface, CreateResetPasswordConfirmInterface, CreateResetPasswordRequestInterface, ResponseAuthLoginGoogleInterface, ResponseAuthLoginInterface, ResponseAuthRegisterInterface, ResponseGoogleAuthInterface, ResponseResetPasswordConfirmInterface, Role } from '../interfaces';
+import { CreateAuthLoginInterface, CreateAuthRegisterInterface, CreateResetPasswordConfirmInterface, CreateResetPasswordRequestInterface, ResponseAuthLoginInterface, ResponseAuthRegisterInterface, ResponseGoogleAuthInterface, ResponseResetPasswordConfirmInterface, Role } from '../interfaces';
 import PayloadJWTInterface from '../interfaces/payload-jwt.interface';
 import { isPlatformBrowser } from '@angular/common';
 
