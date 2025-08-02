@@ -6,11 +6,10 @@
     "serve:dev": "http-server dist/frontend-links-shorteners/browser -p 4200 --push-state",
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "prebuild": "node ./scripts/generate-env.js",
+    "build": "node ./scripts/generate-env.js && ng build --configuration=production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "generate-env": "node ./scripts/generate-env.js",
-    "prebuild": "node ./scripts/generate-env.js",
     "serve:ssr:frontend-links-shorteners": "node dist/frontend-links-shorteners/server/server.mjs"
   },
   "private": true,
