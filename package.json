@@ -9,6 +9,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "generate-env": "node ./scripts/generate-env.js",
+    "prebuild": "node ./scripts/generate-env.js",
     "serve:ssr:frontend-links-shorteners": "node dist/frontend-links-shorteners/server/server.mjs"
   },
   "private": true,
@@ -41,6 +43,7 @@
     "@types/jasmine": "~5.1.0",
     "@types/node": "^18.18.0",
     "daisyui": "^5.0.46",
+    "dotenv": "^17.2.1",
     "jasmine-core": "~5.6.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
